@@ -4,6 +4,6 @@ Treasure hunt game
 
 2022.05.03
 -------------------------------
-Title screen (work on progress)
+Title screen Added (work on progress)
 
 Core functions (work on progress)
