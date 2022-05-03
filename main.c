@@ -4,8 +4,8 @@ https://github.com/trollonion03/Cpre_Tp1
 First build: May 3rd, 2022
 Last build: May 3rd, 2022
 
-Target: Windows(x86-64), v142
-Language : C(MSVC)
+Target: Windows(x86-64)
+Language : C(MSVC, v142)
 ************************************************************/
 
 #pragma warning(disable:6031)
@@ -78,5 +78,4 @@ void movekey() {
 			break;
 		}
 	}
-
 }
