@@ -7,3 +7,9 @@ Treasure hunt game
 Title screen Added (work on progress)
 
 Core functions (work on progress)
+
+2022.05.04
+-------------------------------
+Game screen Added (work on progress)
+
+Core functions (work on progress)
