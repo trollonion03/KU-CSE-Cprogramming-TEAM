@@ -1,5 +1,5 @@
 /************************************************************
-C programming Team project(Traser hunt Game) by Team 7
+C programming Team project(Treasure hunt Game) by Team 7
 https://github.com/trollonion03/Cpre_Tp1
 First build: May 3rd, 2022
 Last build: May 3rd, 2022
