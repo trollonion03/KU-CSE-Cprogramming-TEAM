@@ -19,6 +19,7 @@ void gotoxy(int x, int y);
 void init();
 void CreateTitleScreen();
 void Game_Core();
+void movekey();
 
 
 int main() {
@@ -46,5 +47,36 @@ void CreateTitleScreen() {
 }
 
 void Game_Core() {
+
+}
+
+void movekey() {
+	int x = 0, y = 0, ch;
+	gotoxy(x, y);
+	ch = _getch();
+	if (ch == 224) {
+		ch = _getch();
+		switch (ch) {
+		case 72:
+			printf("\0");
+			y--;
+			break;
+
+		case 80:
+			y++;
+			break;
+
+		case 75:
+			x--;
+			break;
+
+		case 77:
+			x++;
+			break;
+
+		default:
+			break;
+		}
+	}
 
 }
