@@ -2,7 +2,7 @@
 C programming Team project(Treasure hunt Game) by Team 7
 https://github.com/trollonion03/Cpre_Tp1
 First build: May 3rd, 2022
-Last build: May 4th, 2022
+Last build: May 5th, 2022
 
 Target: Windows(x86-64)
 Language : C(MSVC, v142)
@@ -14,12 +14,13 @@ Language : C(MSVC, v142)
 #include <Windows.h>
 #include <conio.h>
 
-//vals
+//Constants
 #define LEFT 75
 #define RIGHT 77
 #define UP 72
 #define DOWN 80
 
+//Global Variables
 int lv;
 
 //functions
@@ -33,6 +34,7 @@ void sel_lv();
 
 
 int main() {
+	//TODO: Modularize it as much as possible
 	int gch;
 	
 	init();
@@ -57,25 +59,34 @@ void init() {
 }
 
 void CreateTitleScreen() {
+	//TODO: New design required!
+	int i, ch;
+	ch = _getch();
 	printf("\n\n\n\n");
 	printf("         #   #   #####   #       #       #####\n");
 	printf("         #   #   #       #       #       #   #\n");
 	printf("         #####   ####    #       #       #   #\n");
 	printf("         #   #   #       #       #       #   #\n");
 	printf("         #   #   #####   #####   #####   #####\n");
-	printf("\n                press 'Y' key to start\n\n\n\n\n");
+	gotoxy(16, 10);
+	printf("press 'Y' key to start");
+	
 }
 
-void sel_lv() {//Optimize needed
+void sel_lv() {
 	int gch1;
 	while (1) {
 		system("cls");
 		printf("--------------------------------------------------------\n");
-		printf("                        레벨 선택\n");
+		gotoxy(24, 1);
+		printf("레벨 선택\n");
 		printf("--------------------------------------------------------\n");
-		printf("\n\n\n\n                        1. 쉬움\n");
-		printf("\n                        2. 보통\n");
-		printf("\n                        3. 어려움\n");
+		gotoxy(24, 4);
+		printf("1. 쉬움");
+		gotoxy(24, 6);
+		printf("2. 보통");
+		gotoxy(24, 8);
+		printf("3. 어려움");
 		gch1 = _getch();
 		switch (gch1) {
 		case '1':
@@ -98,6 +109,7 @@ void sel_lv() {//Optimize needed
 }
 
 void Game_Core(int lvs) {
+	//TODO: Implementation of core functionality
 	int ground[25][15];
 	system("cls");
 	printf("--------------------------------------------------------\n");
@@ -144,27 +156,30 @@ void movekey() {
 }
 
 void Create_Ground() {
+	//if you use a emoji like '■', the emojis consume 2 spaces.
+	//If you want to move one coordinate, you have to move two spaces.
+	//TODO: Find the right ground size
 	int i, j;
-	int x = 28;
-	int y = 12;
+	int x = 12; //width
+	int y = 12; //height
 	for (i = 0; i < x - 1; i++)
 	{
 		gotoxy(i * 2, 4);
-		printf("#");
+		printf("■");
 	}
 	for (i = 0; i < x - 1; i++)
 	{
 		gotoxy(i * 2, y - 1 + 4);
-		printf("#");
+		printf("■");
 	}
 	for (i = 0; i < y; i++)
 	{
 		gotoxy(0, i + 4);
-		printf("#");
+		printf("■");
 	}
 	for (i = 0; i < y; i++)
 	{
 		gotoxy((x - 1) * 2, i + 4);
-		printf("#");
+		printf("■");
 	}
 }
