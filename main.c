@@ -72,9 +72,6 @@ void CreateTitleScreen() {
 	printf("         #   #   #####   #####   #####   #####\n");
 	gotoxy(16, 10);
 	printf("press 'Y' key to start");
-
-	
-	
 }
 
 void sel_lv() {
@@ -85,12 +82,14 @@ void sel_lv() {
 	gotoxy(24, 1);
 	printf("레벨 선택\n");
 	printf("--------------------------------------------------------\n");
-	gotoxy(24, 4);
-	printf("1. 쉬움");
-	gotoxy(24, 6);
-	printf("2. 보통");
-	gotoxy(24, 8);
-	printf("3. 어려움");
+	gotoxy(2, 4); printf("▷ Stage 1");
+	gotoxy(2, 5); printf("◆◇◇\n");
+
+	gotoxy(2, 7); printf("▷ Stage 2");
+	gotoxy(2, 8); printf("◆◆◇");
+
+	gotoxy(2, 10);printf("▷ Stage 3");
+	gotoxy(2, 11); printf("◆◆◆");
 	
 	while (1) {
 		gch1 = _getch();
