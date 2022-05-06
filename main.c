@@ -175,7 +175,7 @@ void Create_Ground() {
 	*TODO: Find the right ground size
 	******************************************************************/
 	int i, j;
-	int x = 40; //width (max 16)
+	int x = 40; //width (max 40)
 	int y = 16; //height(max 16)
 	for (i = 1; i <= x; i++) {
 		printf("#");
