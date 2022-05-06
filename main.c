@@ -58,11 +58,12 @@ void gotoxy(int x, int y) {
 }
 
 void init() {
-	system("mode con cols=56 lines=20 | title test");
+	//system("mode con cols=56 lines=20 | title test"); //Display option and windows name - for release
 }
 
 void CreateTitleScreen() {
 	//TODO: New design required!
+	//x : 56, y : 20
 	int i, ch;
 	ch = _getch();
 	printf("\n\n\n\n");
@@ -79,18 +80,19 @@ void CreateTitleScreen() {
 void sel_lv() {
 	//TODO: New design needed
 	int gch1;
+	system("cls");
+	printf("--------------------------------------------------------\n");
+	gotoxy(24, 1);
+	printf("레벨 선택\n");
+	printf("--------------------------------------------------------\n");
+	gotoxy(24, 4);
+	printf("1. 쉬움");
+	gotoxy(24, 6);
+	printf("2. 보통");
+	gotoxy(24, 8);
+	printf("3. 어려움");
+	
 	while (1) {
-		system("cls");
-		printf("--------------------------------------------------------\n");
-		gotoxy(24, 1);
-		printf("레벨 선택\n");
-		printf("--------------------------------------------------------\n");
-		gotoxy(24, 4);
-		printf("1. 쉬움");
-		gotoxy(24, 6);
-		printf("2. 보통");
-		gotoxy(24, 8);
-		printf("3. 어려움");
 		gch1 = _getch();
 		switch (gch1) {
 		case '1':
@@ -173,26 +175,21 @@ void Create_Ground() {
 	*TODO: Find the right ground size
 	******************************************************************/
 	int i, j;
-	int x = 12; //width
-	int y = 12; //height
-	for (i = 0; i < x - 1; i++)
-	{
-		gotoxy(i * 2, 4);
-		printf("■");
+	int x = 40; //width (max 16)
+	int y = 16; //height(max 16)
+	for (i = 1; i <= x; i++) {
+		printf("#");
 	}
-	for (i = 0; i < x - 1; i++)
-	{
-		gotoxy(i * 2, y - 1 + 4);
-		printf("■");
+	printf("\n");
+	for (i = 1; i <= y - 2; i++) {
+		printf("#");
+		for (j = 1; j <= x - 2; j++) {
+			printf(" ");
+		}
+		printf("#\n");
 	}
-	for (i = 0; i < y; i++)
-	{
-		gotoxy(0, i + 4);
-		printf("■");
+	for (i = 1; i <= x; i++) {
+		printf("#");
 	}
-	for (i = 0; i < y; i++)
-	{
-		gotoxy((x - 1) * 2, i + 4);
-		printf("■");
-	}
+	return 0;
 }
