@@ -170,7 +170,7 @@ void movekey() {
 
 void Create_Ground() {
 	/******************************************************************
-	*if you use a emoji like 'бс', the emojis consume 2 spaces.
+	*if you use a emoji like 'в╖', the emojis consume 2 spaces.
 	*If you want to move one coordinate, you have to move two spaces.
 	*TODO: Find the right ground size
 	******************************************************************/
