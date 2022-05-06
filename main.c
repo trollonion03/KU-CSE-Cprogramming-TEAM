@@ -44,7 +44,7 @@ int main() {
 	CreateTitleScreen();
 	
 	gch = _getch();
-	if (gch == 'Y' || gch == 'y')
+	if (gch == 'y' || gch == 'Y')
 		sel_lv();
 	else
 		return 0;
@@ -64,8 +64,6 @@ void init() {
 void CreateTitleScreen() {
 	//TODO: New design required!
 	//x : 56, y : 20
-	int i, ch;
-	ch = _getch();
 	printf("\n\n\n\n");
 	printf("         #   #   #####   #       #       #####\n");
 	printf("         #   #   #       #       #       #   #\n");
@@ -74,6 +72,8 @@ void CreateTitleScreen() {
 	printf("         #   #   #####   #####   #####   #####\n");
 	gotoxy(16, 10);
 	printf("press 'Y' key to start");
+
+	
 	
 }
 
