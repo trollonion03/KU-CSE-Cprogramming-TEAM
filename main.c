@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <conio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 //Constants
 #define LEFT 75
@@ -31,6 +33,7 @@ void Game_Core(int);
 void Create_Ground();
 void movekey();
 void sel_lv();
+void PrintStory();
 
 
 int main() {
@@ -64,6 +67,8 @@ void init() {
 void CreateTitleScreen() {
 	//TODO: New design required!
 	//x : 56, y : 20
+	char* ch;
+	int i;
 	printf("\n\n\n\n");
 	printf("         #   #   #####   #       #       #####\n");
 	printf("         #   #   #       #       #       #   #\n");
@@ -71,12 +76,23 @@ void CreateTitleScreen() {
 	printf("         #   #   #       #       #       #   #\n");
 	printf("         #   #   #####   #####   #####   #####\n");
 	gotoxy(16, 10);
-	printf("press 'Y' key to start");
+
+	//Print one character per 0.1 second
+	ch = "Press 'Y' key to start!";
+	int length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(100);
+	}
+}
+
+void PrintStory() {
+
 }
 
 void sel_lv() {
 	//TODO: New design needed
-	int gch1;
+	int gch1, y = 4, count = 1;
 	system("cls");
 	printf("--------------------------------------------------------\n");
 	gotoxy(24, 1);
@@ -90,24 +106,49 @@ void sel_lv() {
 
 	gotoxy(2, 10);printf("▷ Stage 3");
 	gotoxy(2, 11); printf("◆◆◆");
-	
+
+	gotoxy(2, 15);
+
 	while (1) {
+		gotoxy(15, y);
+		printf("◀");
 		gch1 = _getch();
+		printf("\b\b  ");
 		switch (gch1) {
-		case '1':
-			lv = 1;
+		case DOWN:
+			count++;
 			break;
-		case '2':
-			lv = 2;
+		case UP:
+			count--;
 			break;
-		case '3':
-			lv = 3;
+		default:
+			break;
+		}
+
+		if (count == 4) {
+			count = 1;
+		}
+		else if (count < 1) {
+			count = 3;
+		}
+		
+		switch (count){
+		case 1:
+			y = 4;
+			break;
+		case 2:
+			y = 7;
+			break;
+		case 3:
+			y = 10;
 			break;
 
 		default:
 			break;
 		}
-		if (gch1 == '1' || gch1 == '2' || gch1 == '3') {
+		
+		if (gch1 == '\r') {
+			lv = count;
 			break;
 		}
 	}
@@ -119,16 +160,16 @@ void Game_Core(int lvs) {
 	system("cls");
 	printf("--------------------------------------------------------\n");
 	if (lvs == 1) {
-		gotoxy(25, 1);
-		printf("쉬움\n");
+		gotoxy(23, 1);
+		printf("Stage %d\n", lvs);
 	}	
 	else if (lvs == 2) {
-		gotoxy(25, 1);
-		printf("보통\n");
+		gotoxy(23, 1);
+		printf("Stage %d\n", lvs);
 	}
 	else if (lvs == 3) {
-		gotoxy(24, 1);
-		printf("어려움\n");
+		gotoxy(23, 1);
+		printf("Stage %d\n", lvs);
 	}	
 	printf("--------------------------------------------------------\n");
 	Create_Ground();
@@ -174,7 +215,7 @@ void Create_Ground() {
 	*TODO: Find the right ground size
 	******************************************************************/
 	int i, j;
-	int x = 40; //width (max 40)
+	int x = 40; //width (max 44)
 	int y = 16; //height(max 16)
 	for (i = 1; i <= x; i++) {
 		printf("#");
@@ -190,5 +231,4 @@ void Create_Ground() {
 	for (i = 1; i <= x; i++) {
 		printf("#");
 	}
-	return 0;
 }
