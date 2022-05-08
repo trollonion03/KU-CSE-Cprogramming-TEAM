@@ -11,3 +11,6 @@ Level select screen Added
 Game screen Added (work on progress)
 
 Core functions (work on progress)
+
+2022.05.09 ~ 2022.05.15
+----------------------------
