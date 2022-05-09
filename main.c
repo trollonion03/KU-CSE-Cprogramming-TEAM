@@ -195,7 +195,6 @@ void Game_Core(int lvs) {
 	}	
 	printf("--------------------------------------------------------\n");
 	Create_Ground(40, 16);
-	gotoxy(2, 4);
 	
 	while (1) {
 		movekey();
