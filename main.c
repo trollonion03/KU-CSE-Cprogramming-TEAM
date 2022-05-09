@@ -8,7 +8,7 @@
 *Language : C(MSVC, v142)
 ************************************************************/
 
-#pragma warning(disable:6031) //for scanf, test
+//#pragma warning(disable:6031) //for scanf, test
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <Windows.h>
@@ -34,6 +34,7 @@ void Create_Ground(short, short);
 void movekey();
 void sel_lv();
 void PrintStory();
+void LoadScreen();
 
 
 int main() {
@@ -44,6 +45,7 @@ int main() {
 	int gch;
 	
 	init();
+	LoadScreen();
 	CreateTitleScreen();
 	
 	gch = _getch();
@@ -69,6 +71,7 @@ void CreateTitleScreen() {
 	//x : 56, y : 20
 	char* ch;
 	int i;
+	system("cls");
 	printf("\n\n\n\n");
 	printf("         #   #   #####   #       #       #####\n");
 	printf("         #   #   #       #       #       #   #\n");
@@ -85,6 +88,25 @@ void CreateTitleScreen() {
 		Sleep(100);
 	}
 }
+
+void LoadScreen() {
+	char* ch;
+	int i;
+	system("cls");
+	gotoxy(26, 7); printf("LOADING...");
+	gotoxy(12, 8); printf("-------------------------------------");
+	gotoxy(12, 9); printf("|                                   |");
+	gotoxy(12, 10); printf("-------------------------------------");
+	gotoxy(13, 9);
+	ch = "###################################";
+	int length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(50);
+	}
+	Sleep(200);
+}
+
 
 void PrintStory() {
 
@@ -156,7 +178,7 @@ void sel_lv() {
 
 void Game_Core(int lvs) {
 	//TODO: Implementation of core functionality
-	int ground[25][15];
+	//int ground[25][15];
 	system("cls");
 	printf("--------------------------------------------------------\n");
 	if (lvs == 1) {
