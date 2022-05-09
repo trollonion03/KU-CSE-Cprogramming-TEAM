@@ -30,7 +30,7 @@ void gotoxy(int, int);
 void init();
 void CreateTitleScreen();
 void Game_Core(int);
-void Create_Ground();
+void Create_Ground(short, short);
 void movekey();
 void sel_lv();
 void PrintStory();
@@ -172,7 +172,7 @@ void Game_Core(int lvs) {
 		printf("Stage %d\n", lvs);
 	}	
 	printf("--------------------------------------------------------\n");
-	Create_Ground();
+	Create_Ground(40, 16);
 	gotoxy(2, 4);
 	
 	while (1) {
@@ -185,6 +185,7 @@ void movekey() {
 	//TODO: Move function to another function
 	static int x, y, count;
 	int ch;
+	
 	if (count == 0) {
 		x = 2; y = 4;
 		count++;
@@ -192,7 +193,6 @@ void movekey() {
 	else {
 		gotoxy(x, y);
 		ch = _getch();
-
 		switch (ch) {
 		case DOWN:
 			y++;
@@ -214,17 +214,16 @@ void movekey() {
 			break;
 		}
 	}
+
 }
 
-void Create_Ground() {
+void Create_Ground(short x, short y) {
 	/******************************************************************
 	*if you use a emoji like '¢·', the emojis consume 2 spaces.
 	*If you want to move one coordinate, you have to move two spaces.
 	*TODO: Find the right ground size
 	******************************************************************/
 	int i, j;
-	int x = 40; //width (max 44)
-	int y = 16; //height(max 16)
 	for (i = 1; i <= x; i++) {
 		printf("#");
 	}
