@@ -173,25 +173,33 @@ void Game_Core(int lvs) {
 	}	
 	printf("--------------------------------------------------------\n");
 	Create_Ground();
-
+	gotoxy(2, 4);
+	
+	while (1) {
+		movekey();
+	}
 	
 }
 
 void movekey() {
 	//TODO: Move function to another function
-	int x = 0, y = 0, ch;
-	gotoxy(x, y);
-	ch = _getch();
-	if (ch == 224) {
+	static int x, y, count;
+	int ch;
+	if (count == 0) {
+		x = 2; y = 4;
+		count++;
+	}
+	else {
+		gotoxy(x, y);
 		ch = _getch();
-		switch (ch) {
-		case UP:
-			printf("\0");
-			y--;
-			break;
 
+		switch (ch) {
 		case DOWN:
 			y++;
+			break;
+
+		case UP:
+			y--;
 			break;
 
 		case LEFT:
