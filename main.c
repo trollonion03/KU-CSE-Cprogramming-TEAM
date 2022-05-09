@@ -8,7 +8,6 @@
 *Language : C(MSVC, v142)
 ************************************************************/
 
-//sync test
 #pragma warning(disable:6031) //for scanf, test
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
