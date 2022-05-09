@@ -2,7 +2,7 @@
 *C programming Team project(Treasure hunt Game) by Team 7
 *https://github.com/trollonion03/Cpre_Tp1
 *First build: May 3rd, 2022
-*Last build: May 7th, 2022
+*Last build: May 9th, 2022
 *
 *Target: Windows(x86-64)
 *Language : C(MSVC, v142)
@@ -231,4 +231,5 @@ void Create_Ground() {
 	for (i = 1; i <= x; i++) {
 		printf("#");
 	}
+
 }
