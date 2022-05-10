@@ -216,19 +216,32 @@ void movekey() {
 		ch = _getch();
 		switch (ch) {
 		case DOWN:
-			y++;
+			if (y > 3 && y < 19)
+				y++;
+			else if (y == 18)
+				y = 19 - 2;
 			break;
 
 		case UP:
-			y--;
+			if (y > 3 && y < 19)
+				y--;
+			else if (y <= 3)
+				y = 4;
 			break;
 
 		case LEFT:
-			x--;
+			if (x >= 1 && x < 40)
+				x--;
+			else if (x == 0)
+				x = 1;
+		
 			break;
 
 		case RIGHT:
-			x++;
+			if (x >= 1 && x < 40 && y > 3)
+				x++;
+			else if (x == 40)
+				x = 40 - 2;
 			break;
 
 		default:
