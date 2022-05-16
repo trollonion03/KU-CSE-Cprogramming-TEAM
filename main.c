@@ -25,6 +25,8 @@
 //Global Variables
 int lv;
 
+static int px, py;
+
 //functions
 void gotoxy(int, int);
 void init();
@@ -196,43 +198,51 @@ void Game_Core(int lvs) {
 	printf("--------------------------------------------------------\n");
 	Create_Ground(40, 16);
 	
+	gotoxy(7, 7);
+	printf("A");
+
 	while (1) {
 		movekey();
+		if (px == 7 && py == 7)
+			break;
 	}
+
 	
 }
 
 void movekey() {
 	//TODO: Move function to another function
-	static int x, y, count;
+	static int count;
 	int ch;
 	
 	if (count == 0) {
-		x = 2; y = 4;
+		px = 1; py = 4;
 		count++;
 	}
 	else {
-		gotoxy(x, y);
+		printf("\b ");
+		gotoxy(px, py);
+		printf("!");
 		ch = _getch();
 		switch (ch) {
 		case DOWN:
-			if (y > 3 && y < 19 && y + 1 != 18)
-				y++;
+			if (py > 3 && py < 19 && py + 1 != 18)
+				py++;
 			break;
 
 		case UP:
-			if (y > 3 && y < 19 && y - 1 != 3)
-				y--;
+			if (py > 3 && py < 19 && py - 1 != 3)
+				py--;
 			break;
 
 		case LEFT:
-			if (x >= 1 && x < 40 && x - 1 != 0)
-				x--;		
+			if (px >= 1 && px < 40 && px - 1 != 0)
+				px--;		
 			break;
 
 		case RIGHT:
-			if (x >= 1 && x < 40 && x + 1 != 39)
-				x++;
+			if (px >= 1 && px < 40 && px + 1 != 39)
+				px++;
 			break;
 
 		default:
@@ -263,5 +273,6 @@ void Create_Ground(short x, short y) {
 	for (i = 1; i <= x; i++) {
 		printf("#");
 	}
+	printf("\n");
 
 }
