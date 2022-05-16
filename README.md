@@ -14,3 +14,8 @@ Core functions (work on progress)
 
 2022.05.09 ~ 2022.05.15
 ----------------------------
+Move player via keyboard(work on progress)
+
+2022.05.16 ~ 2022.05.22
+----------------------------
+Some bugs fixed(Move player via keyboard)
