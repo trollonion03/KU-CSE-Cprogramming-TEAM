@@ -21,6 +21,15 @@
 #define RIGHT 77
 #define UP 72
 #define DOWN 80
+#define MAP_WIDTH 40
+#define MAP_HEIGHT 16
+#define PY_MIN 3
+#define PY_MAX 19
+#define PX_MIN 1
+#define PX_MAX 40
+#define POS_S1 4
+#define POS_S2 7
+#define POS_S3 10
 
 //Global Variables
 int lv;
@@ -158,13 +167,13 @@ void sel_lv() {
 		
 		switch (count){
 		case 1:
-			y = 4;
+			y = POS_S1;
 			break;
 		case 2:
-			y = 7;
+			y = POS_S2;
 			break;
 		case 3:
-			y = 10;
+			y = POS_S3;
 			break;
 
 		default:
@@ -196,15 +205,17 @@ void Game_Core(int lvs) {
 		printf("Stage %d\n", lvs);
 	}	
 	printf("--------------------------------------------------------\n");
-	Create_Ground(40, 16);
-	
+	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	gotoxy(7, 7);
-	printf("A");
+	printf("¡Ü");
 
 	while (1) {
 		movekey();
-		if (px == 7 && py == 7)
+		if (px == 7 && py == 7) {
+			printf("\b   ");
+			gotoxy(0, 18);
 			break;
+		}
 	}
 
 	
@@ -226,22 +237,22 @@ void movekey() {
 		ch = _getch();
 		switch (ch) {
 		case DOWN:
-			if (py > 3 && py < 19 && py + 1 != 18)
+			if (py > PY_MIN && py < PY_MAX && py + 1 != 18)
 				py++;
 			break;
 
 		case UP:
-			if (py > 3 && py < 19 && py - 1 != 3)
+			if (py > PY_MIN && py < PY_MAX && py - 1 != 3)
 				py--;
 			break;
 
 		case LEFT:
-			if (px >= 1 && px < 40 && px - 1 != 0)
+			if (px >= PX_MIN && px < PX_MAX && px - 1 != 0)
 				px--;		
 			break;
 
 		case RIGHT:
-			if (px >= 1 && px < 40 && px + 1 != 39)
+			if (px >= PX_MIN && px < PX_MAX && px + 1 != 39)
 				px++;
 			break;
 
