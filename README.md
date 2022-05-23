@@ -19,3 +19,5 @@ Move player via keyboard(work on progress)
 2022.05.16 ~ 2022.05.22
 ----------------------------
 Some bugs fixed(Move player via keyboard)
+
+goal point added
