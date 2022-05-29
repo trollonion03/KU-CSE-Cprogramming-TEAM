@@ -46,7 +46,8 @@ void movekey();
 void sel_lv();
 void PrintStory();
 void LoadScreen();
-
+void CreateObstacle();
+void Endgame();
 
 int main() {
 	/***********************************************
@@ -84,12 +85,16 @@ void CreateTitleScreen() {
 	int i;
 	system("cls");
 	printf("\n\n\n\n");
-	printf("         #   #   #####   #       #       #####\n");
-	printf("         #   #   #       #       #       #   #\n");
-	printf("         #####   ####    #       #       #   #\n");
-	printf("         #   #   #       #       #       #   #\n");
-	printf("         #   #   #####   #####   #####   #####\n");
-	gotoxy(16, 10);
+	printf("         #####    ####    ####   #####   #####   #####\n");
+	printf("         #       #       #       #   #   #   #   #    \n");
+	printf("         ####     ###    #       #####   #####   #### \n");
+	printf("         #           #   #       #   #   #       #    \n");
+	printf("         #####   ####     ####   #   #   #       #####\n");
+	Sleep(100);
+	gotoxy(23, 10);
+	printf("From Konkuk Univ.");
+	gotoxy(20, 13);
+	Sleep(100);
 
 	//Print one character per 0.1 second
 	ch = "Press 'Y' key to start!";
@@ -237,22 +242,22 @@ void movekey() {
 		ch = _getch();
 		switch (ch) {
 		case DOWN:
-			if (py > PY_MIN && py < PY_MAX && py + 1 != 18)
+			if (py > PY_MIN && py < PY_MAX && py + 1 != PY_MAX-1)
 				py++;
 			break;
 
 		case UP:
-			if (py > PY_MIN && py < PY_MAX && py - 1 != 3)
+			if (py > PY_MIN && py < PY_MAX && py - 1 != PY_MIN)
 				py--;
 			break;
 
 		case LEFT:
-			if (px >= PX_MIN && px < PX_MAX && px - 1 != 0)
+			if (px >= PX_MIN && px < PX_MAX && px - 1 != PX_MIN-1)
 				px--;		
 			break;
 
 		case RIGHT:
-			if (px >= PX_MIN && px < PX_MAX && px + 1 != 39)
+			if (px >= PX_MIN && px < PX_MAX && px + 1 != PX_MAX-1)
 				px++;
 			break;
 
@@ -268,6 +273,7 @@ void Create_Ground(short x, short y) {
 	*if you use a emoji like '¢·', the emojis consume 2 spaces.
 	*If you want to move one coordinate, you have to move two spaces.
 	*TODO: Find the right ground size
+	*TODO: Create random obstacle....
 	******************************************************************/
 	int i, j;
 	for (i = 1; i <= x; i++) {
@@ -286,4 +292,16 @@ void Create_Ground(short x, short y) {
 	}
 	printf("\n");
 
+}
+
+void CreateObstacle() {
+	int wall[MAP_WIDTH][MAP_HEIGHT] = 0;
+	int i;
+	for (i = 0; i <= 10; i++) {
+		
+	}
+}
+
+void Endgame() {
+	
 }
