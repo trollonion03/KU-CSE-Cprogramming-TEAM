@@ -2,7 +2,7 @@
 *C programming Team project(Treasure hunt Game) by Team 7
 *https://github.com/trollonion03/Cpre_Tp1
 *First build: May 3rd, 2022
-*Last build: May 19th, 2022
+*Last build: May 30th, 2022
 *
 *Target: Windows(x86-64)
 *Language : C(MSVC, v142)
@@ -31,10 +31,7 @@
 #define POS_S2 7
 #define POS_S3 10
 
-//Global Variables
-int lv;
-
-static int px, py;
+//Global variables
 
 //functions
 void gotoxy(int, int);
@@ -42,8 +39,8 @@ void init();
 void CreateTitleScreen();
 void Game_Core(int);
 void Create_Ground(short, short);
-void movekey();
-void sel_lv();
+void movekey(int*, int*);
+void sel_lv(int*);
 void PrintStory();
 void LoadScreen();
 void CreateObstacle();
@@ -54,7 +51,7 @@ int main() {
 	*Modularize it as much as possible
 	*Use this function to import other functions
 	***********************************************/
-	int gch;
+	int gch, lv;
 	
 	init();
 	LoadScreen();
@@ -62,7 +59,7 @@ int main() {
 	
 	gch = _getch();
 	if (gch == 'y' || gch == 'Y')
-		sel_lv();
+		sel_lv(&lv);
 	else
 		return 0;
 	Game_Core(lv);
@@ -76,6 +73,7 @@ void gotoxy(int x, int y) {
 
 void init() {
 	//system("mode con cols=56 lines=20 | title test"); //Display option and windows name - for release
+	srand((unsigned int)time(NULL));
 }
 
 void CreateTitleScreen() {
@@ -128,7 +126,7 @@ void PrintStory() {
 
 }
 
-void sel_lv() {
+void sel_lv(int *lv) {
 	//TODO: New design needed
 	int gch1, y = 4, count = 1;
 	system("cls");
@@ -186,7 +184,7 @@ void sel_lv() {
 		}
 		
 		if (gch1 == '\r') {
-			lv = count;
+			*lv = count;
 			break;
 		}
 	}
@@ -195,6 +193,7 @@ void sel_lv() {
 void Game_Core(int lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
+	int px = 0, py = 0, count = 0;
 	system("cls");
 	printf("--------------------------------------------------------\n");
 	if (lvs == 1) {
@@ -211,24 +210,23 @@ void Game_Core(int lvs) {
 	}	
 	printf("--------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
+	CreateObstacle();
 	gotoxy(7, 7);
 	printf("¡Ü");
 
 	while (1) {
-		movekey();
+		movekey(&px, &py);
 		if (px == 7 && py == 7) {
 			printf("\b   ");
 			gotoxy(0, 18);
 			break;
 		}
-	}
-
-	
+	}	
 }
 
-void movekey() {
+void movekey(int *x, int *y) {
 	//TODO: Move function to another function
-	static int count;
+	static int count, px, py;
 	int ch;
 	
 	if (count == 0) {
@@ -264,6 +262,8 @@ void movekey() {
 		default:
 			break;
 		}
+		*x = px;
+		*y = py;
 	}
 
 }
@@ -295,11 +295,40 @@ void Create_Ground(short x, short y) {
 }
 
 void CreateObstacle() {
-	int wall[MAP_WIDTH][MAP_HEIGHT] = 0;
-	int i;
+	/***********************************************************************
+	*Emoji test list
+	*¢Â
+	*TODO: Add the function to verify that obstacles are created correctly
+	***********************************************************************/
+	int wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
+	int i, j, k, x, y, col, row;
 	for (i = 0; i <= 10; i++) {
+		x = rand() % MAP_WIDTH-2;
+		y = rand() % MAP_HEIGHT - 2;
 		
+		if (wall[x][y] != 1) wall[x][y] = 1;
+		else i--;
 	}
+	
+	col = sizeof(wall[0]) / sizeof(int);
+	row = sizeof(wall) / sizeof(wall[0]);
+	//verify	
+	/*for (j = 0; j < row; j++) {
+		for (k = 0; k < col; k++) {
+			if (wall[j][k] == 1) {
+				
+			}
+		}
+	}*/
+	//print
+	for (j = 0; j < row; j++) {
+		for (k = 0; k < col; k++) {
+			if (wall[j][k] == 1) {
+				gotoxy(j+1, k+4);
+				printf("@");
+			}
+		}
+	}	
 }
 
 void Endgame() {
