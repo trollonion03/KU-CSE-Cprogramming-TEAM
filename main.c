@@ -2,7 +2,7 @@
 *C programming Team project(Treasure hunt Game) by Team 7
 *https://github.com/trollonion03/Cpre_Tp1
 *First build: May 3rd, 2022
-*Last build: May 30th, 2022
+*Latest build: May 30th, 2022
 *
 *Target: Windows(x86-64)
 *Language : C(MSVC, v142)
@@ -84,7 +84,7 @@ void CreateTitleScreen() {
 	int i;
 	system("cls");
 	gotoxy(11, 6); printf("|□ game.konkuk.ac.kr   |");
-	gotoxy(63, 6); printf("◀|▶");
+	gotoxy(59, 6); printf("◀|▶ |X|");
 	gotoxy(11, 7); printf("---------------------------------------------------------");
 	gotoxy(11, 8); printf("|           <건대 새내기의 슬기로운 대학생활>           |");
 	gotoxy(11, 9); printf("|                      -0439  7팀-                      |");
