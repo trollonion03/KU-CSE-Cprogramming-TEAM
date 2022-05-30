@@ -30,6 +30,7 @@
 #define POS_S1 4
 #define POS_S2 7
 #define POS_S3 10
+#define POS_S4 13
 
 //Global variables
 
@@ -54,7 +55,7 @@ int main() {
 	int gch, lv;
 	
 	init();
-	LoadScreen();
+	//LoadScreen();
 	CreateTitleScreen();
 	
 	gch = _getch();
@@ -82,21 +83,31 @@ void CreateTitleScreen() {
 	char* ch;
 	int i;
 	system("cls");
-	printf("\n\n\n\n");
-	printf("         #####    ####    ####   #####   #####   #####\n");
-	printf("         #       #       #       #   #   #   #   #    \n");
-	printf("         ####     ###    #       #####   #####   #### \n");
-	printf("         #           #   #       #   #   #       #    \n");
-	printf("         #####   ####     ####   #   #   #       #####\n");
-	Sleep(100);
-	gotoxy(23, 10);
-	printf("From Konkuk Univ.");
-	gotoxy(20, 13);
+	gotoxy(11, 6); printf("|□ game.konkuk.ac.kr   |");
+	gotoxy(63, 6); printf("◀|▶");
+	gotoxy(11, 7); printf("---------------------------------------------------------");
+	gotoxy(11, 8); printf("|           <건대 새내기의 슬기로운 대학생활>           |");
+	gotoxy(11, 9); printf("|                      -0439  7팀-                      |");
+	gotoxy(11, 10); printf("|                                                       |");
+	gotoxy(11, 11); printf("|                       Loading..                       |");
+	gotoxy(11, 12); printf("|                                                       |");
+	gotoxy(11, 13); printf("---------------------------------------------------------");
+
+	gotoxy(22, 12);
+	ch = "■■■■■■■■■■■■■■■■■■";      
+	int length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(50);
+	}
+	Sleep(200);
+
+	gotoxy(28, 14);
 	Sleep(100);
 
 	//Print one character per 0.1 second
 	ch = "Press 'Y' key to start!";
-	int length = strlen(ch);
+	length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
 		Sleep(100);
@@ -134,16 +145,17 @@ void sel_lv(int *lv) {
 	gotoxy(24, 1);
 	printf("레벨 선택\n");
 	printf("--------------------------------------------------------\n");
-	gotoxy(2, 4); printf("▷ Stage 1");
-	gotoxy(2, 5); printf("◆◇◇\n");
+	gotoxy(2, 4); printf("▷ 1학년");
+	gotoxy(2, 5); printf("◆◇◇◇\n");
 
-	gotoxy(2, 7); printf("▷ Stage 2");
-	gotoxy(2, 8); printf("◆◆◇");
+	gotoxy(2, 7); printf("▷ 2학년");
+	gotoxy(2, 8); printf("◆◆◇◇");
 
-	gotoxy(2, 10);printf("▷ Stage 3");
-	gotoxy(2, 11); printf("◆◆◆");
+	gotoxy(2, 10);printf("▷ 3학년");
+	gotoxy(2, 11); printf("◆◆◆◇");
 
-	gotoxy(2, 15);
+	gotoxy(2, 13); printf("▷ 4학년");
+	gotoxy(2, 14); printf("◆◆◆◆");
 
 	while (1) {
 		gotoxy(15, y);
@@ -161,11 +173,11 @@ void sel_lv(int *lv) {
 			break;
 		}
 
-		if (count == 4) {
+		if (count == 5) {
 			count = 1;
 		}
 		else if (count < 1) {
-			count = 3;
+			count = 4;
 		}
 		
 		switch (count){
@@ -178,7 +190,9 @@ void sel_lv(int *lv) {
 		case 3:
 			y = POS_S3;
 			break;
-
+		case 4:
+			y = POS_S4;
+			break;
 		default:
 			break;
 		}
@@ -198,16 +212,20 @@ void Game_Core(int lvs) {
 	printf("--------------------------------------------------------\n");
 	if (lvs == 1) {
 		gotoxy(23, 1);
-		printf("Stage %d\n", lvs);
+		printf("%d 학년\n", lvs);
 	}	
 	else if (lvs == 2) {
 		gotoxy(23, 1);
-		printf("Stage %d\n", lvs);
+		printf("%d 학년\n", lvs);
 	}
 	else if (lvs == 3) {
 		gotoxy(23, 1);
-		printf("Stage %d\n", lvs);
-	}	
+		printf("%d 학년\n", lvs);
+	}
+	else if (lvs == 4) {
+		gotoxy(23, 1);
+		printf("%d 학년\n", lvs);
+	}
 	printf("--------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	CreateObstacle();
