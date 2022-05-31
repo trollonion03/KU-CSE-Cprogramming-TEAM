@@ -27,10 +27,10 @@
 #define PY_MAX 19
 #define PX_MIN 1
 #define PX_MAX 40
-#define POS_S1 4
-#define POS_S2 7
-#define POS_S3 10
-#define POS_S4 13
+#define POS_S1 12
+#define POS_S2 27
+#define POS_S3 42
+#define POS_S4 57
 
 //Global variables
 
@@ -83,11 +83,11 @@ void CreateTitleScreen() {
 	char* ch;
 	int i;
 	system("cls");
-	gotoxy(11, 6); printf("|□ game.konkuk.ac.kr   |");
-	gotoxy(59, 6); printf("◀|▶ |X|");
-	gotoxy(11, 7); printf("---------------------------------------------------------");
-	gotoxy(11, 8); printf("|           <건대 새내기의 슬기로운 대학생활>           |");
-	gotoxy(11, 9); printf("|                      -0439  7팀-                      |");
+	gotoxy(11, 6);  printf("|□ game.konkuk.ac.kr:23   |");
+	gotoxy(59, 6);  printf("◀|▶ |X|");
+	gotoxy(11, 7);  printf("---------------------------------------------------------");
+	gotoxy(11, 8);  printf("|           <건대 새내기의 슬기로운 대학생활>           |");
+	gotoxy(11, 9);  printf("|                      -0439  7팀-                      |");
 	gotoxy(11, 10); printf("|                                                       |");
 	gotoxy(11, 11); printf("|                       Loading..                       |");
 	gotoxy(11, 12); printf("|                                                       |");
@@ -139,11 +139,57 @@ void PrintStory() {
 
 void sel_lv(int *lv) {
 	//TODO: New design needed
-	int gch1, y = 4, count = 1;
+	/*TEST_BED
+	-------------------------------------------------------------------------------
+	                         
+                                      ==========      
+									 ||레벨선택||
+									  ==========                                  
+									                                ◀|▶ |X|      
+          -------------------------------------------------------------------        
+	      |                                                                 |         
+		  |     ▼                                                          |                                   
+          |     |1학년   |     |2학년   |     |3학년   |     |4학년   |     |           
+		  |     |◆◇◇◇|     |◆◆◇◇|     |◆◆◆◇|     |◆◆◆◆|     |              
+	      |                                                                 |       
+		  |     ■설명                                                      |      
+		  |     |                                                           |   
+		  |     |                                                           |
+		  |     |                                                           |
+		  |                                                                 |
+	      -------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+	-------------------------------------------------------------------------------
+	*/
+	int gch1, y = 12, count = 1;
 	system("cls");
-	printf("--------------------------------------------------------\n");
-	gotoxy(24, 1);
-	printf("레벨 선택\n");
+	gotoxy(34, 1); printf("==========");
+	gotoxy(33, 2); printf("||레벨선택||");
+	gotoxy(34, 3); printf("==========");
+	gotoxy(64, 6); printf("◀|▶ |X|");
+	gotoxy(6, 6);  printf("|□ game.konkuk.ac.kr:23/sel_lv   |");
+	gotoxy(6, 7);  printf("-------------------------------------------------------------------");
+	gotoxy(6, 8);  printf("|                                                                 |");
+	gotoxy(6, 9);  printf("|                                                                 |");
+	gotoxy(6, 10); printf("|     |1학년   |     |2학년   |     |3학년   |     |4학년   |     |");
+	gotoxy(6, 11); printf("|     |◆◇◇◇|     |◆◆◇◇|     |◆◆◆◇|     |◆◆◆◆|     |");
+	gotoxy(6, 12); printf("|                                                                 |");
+	gotoxy(6, 13); printf("|     ■ 설명                                                     |");
+	gotoxy(6, 14); printf("|     | 1. 클리어 조건 : 만족도 100 채우기                        |");
+	gotoxy(6, 15); printf("|     | 2. 실패 조건   : 체력 100 모두 소모                       |");
+	gotoxy(6, 16); printf("|     | 3. 랜덤으로 미니게임이 나타납니다!!                       |");
+	gotoxy(6, 17); printf("|                                                                 |");
+	gotoxy(6, 18); printf("-------------------------------------------------------------------");
+
+	/*
 	printf("--------------------------------------------------------\n");
 	gotoxy(2, 4); printf("▷ 1학년");
 	gotoxy(2, 5); printf("◆◇◇◇\n");
@@ -156,17 +202,17 @@ void sel_lv(int *lv) {
 
 	gotoxy(2, 13); printf("▷ 4학년");
 	gotoxy(2, 14); printf("◆◆◆◆");
-
+	*/
 	while (1) {
-		gotoxy(15, y);
-		printf("◀");
+		gotoxy(y, 9);
+		printf("▣");
 		gch1 = _getch();
 		printf("\b\b  ");
 		switch (gch1) {
-		case DOWN:
+		case RIGHT:
 			count++;
 			break;
-		case UP:
+		case LEFT:
 			count--;
 			break;
 		default:
@@ -207,6 +253,7 @@ void sel_lv(int *lv) {
 void Game_Core(int lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
+	
 	int px = 0, py = 0, count = 0;
 	system("cls");
 	printf("--------------------------------------------------------\n");
