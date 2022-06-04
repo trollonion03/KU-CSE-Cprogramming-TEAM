@@ -318,6 +318,7 @@ void Game_Core(int32_t lvs) {
 	//gotoxy(7, 7);
 	//printf("¡Ü");
 
+	//if you use Debugger, Set a breakpoint on line 327
 	while (1) {
 		movekey(&px, &py);
 		if (map_g[px - 1][py - 4] == 1) {
@@ -407,11 +408,11 @@ void Create_Ground(int16_t x, int16_t y) {
 }
 
 void CreateObstacle() {
-	/***********************************************************************
+	/***************************************************************************
 	*Emoji test list
-	*¢Â
-	*TODO: Add the function to verify that obstacles are created correctly
-	***********************************************************************/
+	*¢Â!@#$%^&*()_+|
+	*TODO: Add the verification method to check obstacles are created correctly
+	***************************************************************************/
 	int32_t wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
 
