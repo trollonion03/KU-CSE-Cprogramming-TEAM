@@ -45,7 +45,7 @@ void Create_Ground(int16_t, int16_t);
 void movekey(int32_t*, int32_t*);
 void sel_lv(int32_t*);
 void Story();
-void LoadScreen();
+void LoadScreen(uint16_t);
 void CreateObstacle();
 void Endgame();
 
@@ -57,7 +57,7 @@ int32_t main() {
 	int32_t gch, lv;
 	
 	init();
-	//LoadScreen();
+	//LoadScreen(1);
 	CreateTitleScreen();
 	
 	//TODO: getch() -> kbhit()
@@ -69,6 +69,7 @@ int32_t main() {
 	}
 	else
 		return 0;
+	LoadScreen(2);
 	Game_Core(lv);
 	
 }
@@ -122,21 +123,45 @@ void CreateTitleScreen() {
 	}
 }
 
-void LoadScreen() {
+void LoadScreen(uint16_t sc) {
 	uint8_t* ch;
-	int32_t i;
-
+	int32_t i, length;
+	
 	system("cls");
-	gotoxy(26, 7); printf("LOADING...");
-	gotoxy(12, 8); printf("-------------------------------------");
-	gotoxy(12, 9); printf("|                                   |");
-	gotoxy(12, 10); printf("-------------------------------------");
-	gotoxy(13, 9);
-	ch = "###################################";
-	int32_t length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(50);
+	switch (sc) {
+	case 1:
+		gotoxy(26, 7); printf("LOADING...");
+		gotoxy(12, 8); printf("-------------------------------------");
+		gotoxy(12, 9); printf("|                                   |");
+		gotoxy(12, 10); printf("-------------------------------------");
+		gotoxy(13, 9);
+		ch = "###################################";
+		length = strlen(ch);
+		for (i = 0; i < length; i++) {
+			printf("%c", ch[i]);
+			Sleep(50);
+		} break;
+	case 2:
+		gotoxy(11, 6);  printf("|¡à game.konkuk.ac.kr:23/loading/tips   |");
+		gotoxy(59, 6);  printf("¢¸|¢º |X|");
+		gotoxy(11, 7);  printf("---------------------------------------------------------");
+		gotoxy(11, 8);  printf("|                                                       |");
+		gotoxy(11, 9);  printf("|                                                       |");
+		gotoxy(11, 10); printf("|                                                       |");
+		gotoxy(11, 11); printf("|                       Loading..                       |");
+		gotoxy(11, 12); printf("|                                                       |");
+		gotoxy(11, 13); printf("---------------------------------------------------------");
+
+		gotoxy(22, 12);
+		ch = "¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á";
+		length = strlen(ch);
+		for (i = 0; i < length; i++) {
+			printf("%c", ch[i]);
+			Sleep(50);
+		}break;
+
+	default:
+		break;
 	}
 	Sleep(200);
 }
