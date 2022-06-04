@@ -319,6 +319,7 @@ void Game_Core(int32_t lvs) {
 	//printf("¡Ü");
 
 	//if you use Debugger, Set a breakpoint on line 327
+	//TODO: need to fix
 	while (1) {
 		movekey(&px, &py);
 		if (map_g[px - 1][py - 4] == 1) {
