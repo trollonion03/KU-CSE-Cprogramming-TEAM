@@ -44,12 +44,12 @@ void Game_Core(int32_T);
 void Create_Ground(int16_t, int16_t);
 void movekey(int32_t*, int32_t*);
 void sel_lv(int32_t*);
-void PrintStory();
+void Story();
 void LoadScreen();
 void CreateObstacle();
 void Endgame();
 
-int main() {
+int32_t main() {
 	/***********************************************
 	*Modularize it as much as possible
 	*Use this function to import other functions
@@ -60,9 +60,13 @@ int main() {
 	//LoadScreen();
 	CreateTitleScreen();
 	
+	//TODO: getch() -> kbhit()
 	gch = _getch();
-	if (gch == 'y' || gch == 'Y')
+	if (gch == 'y' || gch == 'Y') {
+		//Automatically move on to the next function
+		Story();
 		sel_lv(&lv);
+	}
 	else
 		return 0;
 	Game_Core(lv);
@@ -82,7 +86,7 @@ void init() {
 void CreateTitleScreen() {
 	//TODO: New design required!
 	//x : 56, y : 20
-	int8_t* ch;
+	uint8_t* ch;
 	int32_t i;
 
 	system("cls");
@@ -109,6 +113,7 @@ void CreateTitleScreen() {
 	Sleep(100);
 
 	//Print one character per 0.1 second
+	//TODO: change "press y key" to "press any key"
 	ch = "Press 'Y' key to start!";
 	length = strlen(ch);
 	for (i = 0; i < length; i++) {
@@ -118,7 +123,7 @@ void CreateTitleScreen() {
 }
 
 void LoadScreen() {
-	int8_t* ch;
+	uint8_t* ch;
 	int32_t i;
 
 	system("cls");
@@ -137,42 +142,71 @@ void LoadScreen() {
 }
 
 
-void PrintStory() {
+void Story() {
+	uint8_t* ch;
+	int32_t i;
 
+	system("cls");
+	gotoxy(64, 6); printf("◀|▶ |X|");
+	gotoxy(6, 6);  printf("|□ game.konkuk.ac.kr:23/Story1   |");
+	gotoxy(6, 7);  printf("-------------------------------------------------------------------");
+	gotoxy(6, 8);  printf("|                                                                 |");
+	gotoxy(6, 9);  printf("|                                                                 |");
+	gotoxy(6, 10); printf("|                                                                 |");
+	gotoxy(6, 11); printf("|                                                                 |");
+	gotoxy(6, 12); printf("|                                                                 |");
+	gotoxy(6, 13); printf("|                                                                 |");
+	gotoxy(6, 14); printf("|                                                                 |");
+	gotoxy(6, 15); printf("|                                                                 |");
+	gotoxy(6, 16); printf("|                                                                 |");
+	gotoxy(6, 17); printf("|                                                                 |");
+	gotoxy(6, 18); printf("-------------------------------------------------------------------");
+	
+	gotoxy(8, 8);
+	ch = "코로나 팬데믹이라는 상황에도 불구하고 열심히 공부하여";
+	int32_t length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(50);
+	}
+
+	gotoxy(8, 10);
+	ch = "건대 컴공에 합격한 당신!";
+	length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(50);
+	}
+
+	gotoxy(8, 12);
+	ch = "비대면 강의부터 대면 강의, 팀플, 과제 그리고";
+	length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(50);
+	}
+
+	gotoxy(8, 14);
+	ch = "건대에서만 볼 수 있는 특별한 동물들까지..!!";
+	length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(50);
+	}
+
+	gotoxy(8, 16);
+	ch = "건대 새내기의 슬기로운 학교생활이 지금 시작됩니다!";
+	length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(50);
+	}
+
+	Sleep(500);
 }
 
 void sel_lv(int32_t *lv) {
 	//TODO: New design needed
-	/*TEST_BED
-	-------------------------------------------------------------------------------
-	                         
-                                      ==========      
-									 ||레벨선택||
-									  ==========                                  
-									                                ◀|▶ |X|      
-          -------------------------------------------------------------------        
-	      |                                                                 |         
-		  |     ▼                                                          |                                   
-          |     |1학년   |     |2학년   |     |3학년   |     |4학년   |     |           
-		  |     |◆◇◇◇|     |◆◆◇◇|     |◆◆◆◇|     |◆◆◆◆|     |              
-	      |                                                                 |       
-		  |     ■설명                                                      |      
-		  |     |                                                           |   
-		  |     |                                                           |
-		  |     |                                                           |
-		  |                                                                 |
-	      -------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-	-------------------------------------------------------------------------------
-	*/
 	int32_t gch1, y = 12, count = 1;
 
 	system("cls");
@@ -291,7 +325,7 @@ void Game_Core(int32_t lvs) {
 			count++;
 			if (count == 10) 
 				break;
-		}
+		} //need to fix
 
 		/*if (px == 7 && py == 7) {
 			printf("\b   ");
@@ -302,7 +336,7 @@ void Game_Core(int32_t lvs) {
 }
 
 void movekey(int32_t *x, int32_t *y) {
-	//TODO: Move function to another function
+	//TODO: Input-delay needed!
 	static int32_t count, px, py;
 	int32_t ch;
 	
@@ -378,25 +412,27 @@ void CreateObstacle() {
 	*◈
 	*TODO: Add the function to verify that obstacles are created correctly
 	***********************************************************************/
-	//int32_t wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
+	int32_t wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
 
-	col = sizeof(map_g[0]) / sizeof(int32_t);
-	row = sizeof(map_g) / sizeof(map_g[0]);
+	col = sizeof(wall[0]) / sizeof(int32_t);
+	row = sizeof(wall) / sizeof(wall[0]);
 	
 	//init
-	for (j = 0; j < row; j++) {
+	memset(map_g, 0, sizeof(map_g));
+	
+	/*for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
 			map_g[j][k] = 0;
 		}
-	}
+	}*/
 
 	//
 	for (i = 0; i <= 10; i++) {
 		x = rand() % MAP_WIDTH-2;
 		y = rand() % MAP_HEIGHT - 2;
 		
-		if (map_g[x][y] != 1) map_g[x][y] = 1;
+		if (wall[x][y] != 1) wall[x][y] = 1;
 		else i--;
 	}
 	
@@ -413,14 +449,49 @@ void CreateObstacle() {
 	//print
 	for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
-			if (map_g[j][k] == 1) {
+			if (wall[j][k] == 1) {
 				gotoxy(j+1, k+4);
 				printf("@");
 			}
 		}
 	}
+
+	//copy
+	memmove(map_g, wall, sizeof(wall));
+	memset(wall, 0, sizeof(wall));
 }
 
 void Endgame() {
 	
 }
+
+/*TEST_BED
+	-------------------------------------------------------------------------------
+
+									  ==========
+									 ||레벨선택||
+									  ==========
+																	◀|▶ |X|
+		  -------------------------------------------------------------------
+		  |                                                                 |
+		  |     ▼                                                          |
+		  |     |1학년   |     |2학년   |     |3학년   |     |4학년   |     |
+		  |     |◆◇◇◇|     |◆◆◇◇|     |◆◆◆◇|     |◆◆◆◆|     |
+		  |                                                                 |
+		  |     ■설명                                                      |
+		  |     |                                                           |
+		  |     |                                                           |
+		  |     |                                                           |
+		  |                                                                 |
+		  -------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+	-------------------------------------------------------------------------------
+	*/
