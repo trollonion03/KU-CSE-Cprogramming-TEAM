@@ -1,8 +1,8 @@
 /************************************************************
 *C programming Team project(Treasure hunt Game) by Team 7
 *https://github.com/trollonion03/Cpre_Tp1
-*First build: May 3rd, 2022
-*Latest build: May 30th, 2022
+*First build: May. 3rd, 2022
+*Latest build:JUN. 4th, 2022
 *
 *Target: Windows(x86-64)
 *Language : C(MSVC, v142)
@@ -326,9 +326,10 @@ void Game_Core(int32_t lvs) {
 			count++;
 			if (count == 10) 
 				break;
-		} //need to fix
+		}
 
-		/*if (px == 7 && py == 7) {
+		/* for test
+		if (px == 7 && py == 7) {
 			printf("\b   ");
 			gotoxy(0, 18);
 			break;
@@ -337,7 +338,7 @@ void Game_Core(int32_t lvs) {
 }
 
 void movekey(int32_t *x, int32_t *y) {
-	//TODO: Input-delay needed!
+	//TODO: Add Input-delay
 	static int32_t count, px, py;
 	int32_t ch;
 	
@@ -385,7 +386,6 @@ void Create_Ground(int16_t x, int16_t y) {
 	*if you use a emoji like '¢·', the emojis consume 2 spaces.
 	*If you want to move one coordinate, you have to move two spaces.
 	*TODO: Find the right ground size
-	*TODO: Create random obstacle....
 	******************************************************************/
 	int32_t i, j;
 
@@ -415,20 +415,15 @@ void CreateObstacle() {
 	***************************************************************************/
 	int32_t wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
+	uint16_t count = 0;
 
 	col = sizeof(wall[0]) / sizeof(int32_t);
 	row = sizeof(wall) / sizeof(wall[0]);
 	
 	//init
 	memset(map_g, 0, sizeof(map_g));
-	
-	/*for (j = 0; j < row; j++) {
-		for (k = 0; k < col; k++) {
-			map_g[j][k] = 0;
-		}
-	}*/
 
-	//
+	//Create random item
 	for (i = 0; i <= 10; i++) {
 		x = rand() % MAP_WIDTH-2;
 		y = rand() % MAP_HEIGHT - 2;
@@ -437,15 +432,14 @@ void CreateObstacle() {
 		else i--;
 	}
 	
-	
-	//verify	
-	/*for (j = 0; j < row; j++) {
+	//verify - for debug
+	for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
 			if (wall[j][k] == 1) {
-				
+				count++;
 			}
 		}
-	}*/
+	}
 
 	//print
 	for (j = 0; j < row; j++) {
