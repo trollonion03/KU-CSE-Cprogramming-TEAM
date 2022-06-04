@@ -14,6 +14,7 @@
 #include <Windows.h>
 #include <conio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <stdint.h>
 
 //Constants
@@ -33,15 +34,16 @@
 #define POS_S4 57
 
 //Global variables
+int32_t map_g[MAP_WIDTH-2][MAP_HEIGHT-2];
 
 //functions
-void gotoxy(int, int);
+void gotoxy(int32_t, int32_t);
 void init();
 void CreateTitleScreen();
-void Game_Core(int);
-void Create_Ground(short, short);
-void movekey(int*, int*);
-void sel_lv(int*);
+void Game_Core(int32_T);
+void Create_Ground(int16_t, int16_t);
+void movekey(int32_t*, int32_t*);
+void sel_lv(int32_t*);
 void PrintStory();
 void LoadScreen();
 void CreateObstacle();
@@ -52,7 +54,7 @@ int main() {
 	*Modularize it as much as possible
 	*Use this function to import other functions
 	***********************************************/
-	int gch, lv;
+	int32_t gch, lv;
 	
 	init();
 	//LoadScreen();
@@ -67,7 +69,7 @@ int main() {
 	
 }
 
-void gotoxy(int x, int y) {
+void gotoxy(int32_t x, int32_t y) {
 	COORD Cur = { x, y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
 }
@@ -80,8 +82,9 @@ void init() {
 void CreateTitleScreen() {
 	//TODO: New design required!
 	//x : 56, y : 20
-	char* ch;
-	int i;
+	int8_t* ch;
+	int32_t i;
+
 	system("cls");
 	gotoxy(11, 6);  printf("|□ game.konkuk.ac.kr:23   |");
 	gotoxy(59, 6);  printf("◀|▶ |X|");
@@ -95,7 +98,7 @@ void CreateTitleScreen() {
 
 	gotoxy(22, 12);
 	ch = "■■■■■■■■■■■■■■■■■■";      
-	int length = strlen(ch);
+	int32_t length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
 		Sleep(50);
@@ -115,8 +118,9 @@ void CreateTitleScreen() {
 }
 
 void LoadScreen() {
-	char* ch;
-	int i;
+	int8_t* ch;
+	int32_t i;
+
 	system("cls");
 	gotoxy(26, 7); printf("LOADING...");
 	gotoxy(12, 8); printf("-------------------------------------");
@@ -124,7 +128,7 @@ void LoadScreen() {
 	gotoxy(12, 10); printf("-------------------------------------");
 	gotoxy(13, 9);
 	ch = "###################################";
-	int length = strlen(ch);
+	int32_t length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
 		Sleep(50);
@@ -137,7 +141,7 @@ void PrintStory() {
 
 }
 
-void sel_lv(int *lv) {
+void sel_lv(int32_t *lv) {
 	//TODO: New design needed
 	/*TEST_BED
 	-------------------------------------------------------------------------------
@@ -169,7 +173,8 @@ void sel_lv(int *lv) {
 
 	-------------------------------------------------------------------------------
 	*/
-	int gch1, y = 12, count = 1;
+	int32_t gch1, y = 12, count = 1;
+
 	system("cls");
 	gotoxy(34, 1); printf("==========");
 	gotoxy(33, 2); printf("||레벨선택||");
@@ -179,13 +184,13 @@ void sel_lv(int *lv) {
 	gotoxy(6, 7);  printf("-------------------------------------------------------------------");
 	gotoxy(6, 8);  printf("|                                                                 |");
 	gotoxy(6, 9);  printf("|                                                                 |");
-	gotoxy(6, 10); printf("|     |1학년   |     |2학년   |     |3학년   |     |4학년   |     |");
-	gotoxy(6, 11); printf("|     |◆◇◇◇|     |◆◆◇◇|     |◆◆◆◇|     |◆◆◆◆|     |");
+	gotoxy(6, 10); printf("|     |Stage 1 |     |Stage 2 |     |Stage 3 |     |Stage 4 |     |");
+	gotoxy(6, 11); printf("|     |1학년   |     |2학년   |     |3학년   |     |4학년   |     |");
 	gotoxy(6, 12); printf("|                                                                 |");
 	gotoxy(6, 13); printf("|     ■ 설명                                                     |");
 	gotoxy(6, 14); printf("|     | 1. 클리어 조건 : 만족도 100 채우기                        |");
 	gotoxy(6, 15); printf("|     | 2. 실패 조건   : 체력 100 모두 소모                       |");
-	gotoxy(6, 16); printf("|     | 3. 랜덤으로 미니게임이 나타납니다!!                       |");
+	gotoxy(6, 16); printf("|     | 3. 랜덤으로 미니게임이 나타납니다?!!                      |");
 	gotoxy(6, 17); printf("|                                                                 |");
 	gotoxy(6, 18); printf("-------------------------------------------------------------------");
 
@@ -242,7 +247,7 @@ void sel_lv(int *lv) {
 		default:
 			break;
 		}
-		
+
 		if (gch1 == '\r') {
 			*lv = count;
 			break;
@@ -250,11 +255,11 @@ void sel_lv(int *lv) {
 	}
 }
 
-void Game_Core(int lvs) {
+void Game_Core(int32_t lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
-	
-	int px = 0, py = 0, count = 0;
+	int32_t px = 0, py = 0, count = 0;
+
 	system("cls");
 	printf("--------------------------------------------------------\n");
 	if (lvs == 1) {
@@ -276,23 +281,30 @@ void Game_Core(int lvs) {
 	printf("--------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	CreateObstacle();
-	gotoxy(7, 7);
-	printf("●");
+	//gotoxy(7, 7);
+	//printf("●");
 
 	while (1) {
 		movekey(&px, &py);
-		if (px == 7 && py == 7) {
+		if (map_g[px - 1][py - 4] == 1) {
+			map_g[px - 1][py - 4] = 0;
+			count++;
+			if (count == 10) 
+				break;
+		}
+
+		/*if (px == 7 && py == 7) {
 			printf("\b   ");
 			gotoxy(0, 18);
 			break;
-		}
+		}*/
 	}	
 }
 
-void movekey(int *x, int *y) {
+void movekey(int32_t *x, int32_t *y) {
 	//TODO: Move function to another function
-	static int count, px, py;
-	int ch;
+	static int32_t count, px, py;
+	int32_t ch;
 	
 	if (count == 0) {
 		px = 1; py = 4;
@@ -333,14 +345,15 @@ void movekey(int *x, int *y) {
 
 }
 
-void Create_Ground(short x, short y) {
+void Create_Ground(int16_t x, int16_t y) {
 	/******************************************************************
 	*if you use a emoji like '◁', the emojis consume 2 spaces.
 	*If you want to move one coordinate, you have to move two spaces.
 	*TODO: Find the right ground size
 	*TODO: Create random obstacle....
 	******************************************************************/
-	int i, j;
+	int32_t i, j;
+
 	for (i = 1; i <= x; i++) {
 		printf("#");
 	}
@@ -365,18 +378,29 @@ void CreateObstacle() {
 	*◈
 	*TODO: Add the function to verify that obstacles are created correctly
 	***********************************************************************/
-	int wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
-	int i, j, k, x, y, col, row;
+	//int32_t wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
+	int32_t i, j, k, x, y, col, row;
+
+	col = sizeof(map_g[0]) / sizeof(int32_t);
+	row = sizeof(map_g) / sizeof(map_g[0]);
+	
+	//init
+	for (j = 0; j < row; j++) {
+		for (k = 0; k < col; k++) {
+			map_g[j][k] = 0;
+		}
+	}
+
+	//
 	for (i = 0; i <= 10; i++) {
 		x = rand() % MAP_WIDTH-2;
 		y = rand() % MAP_HEIGHT - 2;
 		
-		if (wall[x][y] != 1) wall[x][y] = 1;
+		if (map_g[x][y] != 1) map_g[x][y] = 1;
 		else i--;
 	}
 	
-	col = sizeof(wall[0]) / sizeof(int);
-	row = sizeof(wall) / sizeof(wall[0]);
+	
 	//verify	
 	/*for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
@@ -385,15 +409,16 @@ void CreateObstacle() {
 			}
 		}
 	}*/
+
 	//print
 	for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
-			if (wall[j][k] == 1) {
+			if (map_g[j][k] == 1) {
 				gotoxy(j+1, k+4);
 				printf("@");
 			}
 		}
-	}	
+	}
 }
 
 void Endgame() {
