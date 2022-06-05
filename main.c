@@ -40,7 +40,7 @@ int32_t map_g[MAP_WIDTH-2][MAP_HEIGHT-2];
 void gotoxy(int32_t, int32_t);
 void init();
 void CreateTitleScreen();
-void Game_Core(int32_T);
+void Game_Core(int32_t);
 void Create_Ground(int16_t, int16_t);
 void movekey(int32_t*, int32_t*);
 void sel_lv(int32_t*);
