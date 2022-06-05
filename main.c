@@ -2,7 +2,7 @@
 *C programming Team project(Treasure hunt Game) by Team 7
 *https://github.com/trollonion03/Cpre_Tp1
 *First build: May. 3rd, 2022
-*Latest build:JUN. 4th, 2022
+*Latest build:JUN. 6th, 2022
 *
 *Target: Windows(x86-64)
 *Language : C(MSVC, v142)
@@ -60,18 +60,21 @@ int32_t main() {
 	//LoadScreen(1);
 	CreateTitleScreen();
 	
+	
 	//TODO: getch() -> kbhit()
 	gch = _getch();
 	if (gch == 'y' || gch == 'Y') {
 		//Automatically move on to the next function
 		Story();
-		sel_lv(&lv);
 	}
 	else
 		return 0;
-	LoadScreen(2);
-	Game_Core(lv);
 	
+	while (1) {
+		sel_lv(&lv);
+		LoadScreen(2);
+		Game_Core(lv);
+	}
 }
 
 void gotoxy(int32_t x, int32_t y) {
@@ -317,7 +320,7 @@ void sel_lv(int32_t *lv) {
 void Game_Core(int32_t lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
-	int32_t px = 0, py = 0, count = 0;
+	int32_t px = 0, py = 0, count = 0, count2 = 0;
 
 	system("cls");
 	printf("--------------------------------------------------------\n");
@@ -340,6 +343,7 @@ void Game_Core(int32_t lvs) {
 	printf("--------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	CreateObstacle();
+	px = 1; py = 4;
 	//gotoxy(7, 7);
 	//printf("¡Ü");
 
@@ -347,12 +351,18 @@ void Game_Core(int32_t lvs) {
 	//if you want status on another postion, use gotoxy(px, py); after new function ended!
 	//TODO: need to fix
 	while (1) {
+		if (count2 == 0)
+			px = 1; py = 4; count2++;
+
 		movekey(&px, &py);
 		if (map_g[px - 1][py - 4] == 1) {
 			map_g[px - 1][py - 4] = 0;
 			count++;
-			if (count == 10) 
+			if (count == 10) {
+				count = 0;
+				count2= 0;
 				break;
+			}
 		}
 
 		/* for test
@@ -441,6 +451,7 @@ void CreateObstacle() {
 	* -------------------------
 	* Item: 1, wall: 2, obstacle: 3
 	*TODO: Add the verification method to check obstacles are created correctly
+	*TODO: Fix the bug where one more item is generated
 	***************************************************************************/
 	int32_t item[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
