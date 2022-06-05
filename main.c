@@ -343,7 +343,8 @@ void Game_Core(int32_t lvs) {
 	//gotoxy(7, 7);
 	//printf("¡Ü");
 
-	//if you use Debugger, Set a breakpoint on line 327
+	//if you use Debugger, Set a breakpoint on line 354
+	//if you want status on another postion, use gotoxy(px, py); after new function ended!
 	//TODO: need to fix
 	while (1) {
 		movekey(&px, &py);
@@ -379,22 +380,22 @@ void movekey(int32_t *x, int32_t *y) {
 		ch = _getch();
 		switch (ch) {
 		case DOWN:
-			if (py > PY_MIN && py < PY_MAX && py + 1 != PY_MAX-1)
+			if (py > PY_MIN && py < PY_MAX && py + 1 != PY_MAX-1 && map_g[px-1][py-3] != 2)
 				py++;
 			break;
 
 		case UP:
-			if (py > PY_MIN && py < PY_MAX && py - 1 != PY_MIN)
+			if (py > PY_MIN && py < PY_MAX && py - 1 != PY_MIN && map_g[px-1][py-5] != 2)
 				py--;
 			break;
 
 		case LEFT:
-			if (px >= PX_MIN && px < PX_MAX && px - 1 != PX_MIN-1)
+			if (px >= PX_MIN && px < PX_MAX && px - 1 != PX_MIN-1 && map_g[px-2][py-4] != 2)
 				px--;		
 			break;
 
 		case RIGHT:
-			if (px >= PX_MIN && px < PX_MAX && px + 1 != PX_MAX-1)
+			if (px >= PX_MIN && px < PX_MAX && px + 1 != PX_MAX-1 && map_g[px][py-4] != 2)
 				px++;
 			break;
 
@@ -437,14 +438,16 @@ void CreateObstacle() {
 	/***************************************************************************
 	*Emoji test list
 	*¢Â!@#$%^&*()_+|
+	* -------------------------
+	* Item: 1, wall: 2, obstacle: 3
 	*TODO: Add the verification method to check obstacles are created correctly
 	***************************************************************************/
-	int32_t wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
+	int32_t item[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
 	uint16_t count = 0;
 
-	col = sizeof(wall[0]) / sizeof(int32_t);
-	row = sizeof(wall) / sizeof(wall[0]);
+	col = sizeof(item[0]) / sizeof(int32_t);
+	row = sizeof(item) / sizeof(item[0]);
 	
 	//init
 	memset(map_g, 0, sizeof(map_g));
@@ -454,32 +457,54 @@ void CreateObstacle() {
 		x = rand() % MAP_WIDTH-2;
 		y = rand() % MAP_HEIGHT - 2;
 		
-		if (wall[x][y] != 1) wall[x][y] = 1;
+		if (item[x][y] == 0) item[x][y] = 1;
+		else i--;
+	}
+
+	//Create random wall
+	for (i = 0; i <= 20; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 2;
+		else i--;
+	}
+
+	//Create random obstacle
+	for (i = 0; i <= 10; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 3;
 		else i--;
 	}
 	
 	//verify - for debug
-	for (j = 0; j < row; j++) {
+	/*for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
-			if (wall[j][k] == 1) {
+			if (item[j][k] == 1) {
 				count++;
 			}
 		}
-	}
+	}*/
 
 	//print
 	for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
-			if (wall[j][k] == 1) {
+			if (item[j][k] == 1) {
 				gotoxy(j+1, k+4);
 				printf("@");
+			}
+			else if (item[j][k] == 2) {
+				gotoxy(j+1, k+4);
+				printf("#");
 			}
 		}
 	}
 
 	//copy
-	memmove(map_g, wall, sizeof(wall));
-	memset(wall, 0, sizeof(wall));
+	memmove(map_g, item, sizeof(item));
+	memset(item, 0, sizeof(item));
 }
 
 void Endgame() {
