@@ -2,7 +2,7 @@
 *C programming Team project(Treasure hunt Game) by Team 7
 *https://github.com/trollonion03/Cpre_Tp1
 *First build: May. 3rd, 2022
-*Latest build:JUN. 6th, 2022
+*Latest build:JUN. 7th, 2022
 *
 *Target: Windows(x86-64)
 *Language : C(MSVC, v142)
@@ -46,7 +46,7 @@ void movekey(int32_t*, int32_t*);
 void sel_lv(int32_t*);
 void Story();
 void LoadScreen(uint16_t);
-void CreateObstacle();
+void CreateObstacle(int32_t lv);
 void Endgame();
 
 int32_t main() {
@@ -342,20 +342,20 @@ void Game_Core(int32_t lvs) {
 	}
 	printf("--------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
-	CreateObstacle();
+	CreateObstacle(lvs);
 	px = 1; py = 4;
 	//gotoxy(7, 7);
 	//printf("¡Ü");
 
 	//if you use Debugger, Set a breakpoint on line 354
 	//if you want status on another postion, use gotoxy(px, py); after new function ended!
-	//TODO: need to fix
+	//TODO: Add game over & game clear conditions
 	while (1) {
 		if (count2 == 0)
 			px = 1; py = 4; count2++;
 
 		movekey(&px, &py);
-		if (map_g[px - 1][py - 4] == 1) {
+		/*if (map_g[px - 1][py - 4] == 1) {
 			map_g[px - 1][py - 4] = 0;
 			count++;
 			if (count == 10) {
@@ -363,7 +363,7 @@ void Game_Core(int32_t lvs) {
 				count2= 0;
 				break;
 			}
-		}
+		}*/
 
 		/* for test
 		if (px == 7 && py == 7) {
@@ -444,18 +444,38 @@ void Create_Ground(int16_t x, int16_t y) {
 
 }
 
-void CreateObstacle() {
+void CreateObstacle(int32_t lv) {
 	/***************************************************************************
 	*Emoji test list
 	*¢Â!@#$%^&*()_+|
 	* -------------------------
-	* Item: 1, wall: 2, obstacle: 3
+	* MT: 1, wall: 2, drinking party: 3, class absence: 4
+	* dining : 5, Team project: 6, homework: 7,  class: 8, online class: 9
 	*TODO: Add the verification method to check obstacles are created correctly
 	*TODO: Fix the bug where one more item is generated
 	***************************************************************************/
 	int32_t item[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
 	uint16_t count = 0;
+	int32_t mt, dp, ca, di, tp, hw, cl, oc; //without wall
+
+	switch (lv) {
+	case 1:
+		mt = 1; dp = 2; ca = 3; di = 4; tp = 1; hw = 2; cl = 3; oc = 4;
+		break;
+	case 2:
+		mt = 1; dp = 2; ca = 2; di = 4; tp = 1; hw = 2; cl = 4; oc = 3;
+		break;
+	case 3:
+		mt = 1; dp = 2; ca = 2; di = 3; tp = 2; hw = 2; cl = 3; oc = 3;
+		break;
+	case 4:
+		mt = 0; dp = 3; ca = 3; di = 2; tp = 2; hw = 3; cl = 3; oc = 3;
+		break;
+	
+	default:
+		break;
+	}
 
 	col = sizeof(item[0]) / sizeof(int32_t);
 	row = sizeof(item) / sizeof(item[0]);
@@ -464,11 +484,67 @@ void CreateObstacle() {
 	memset(map_g, 0, sizeof(map_g));
 
 	//Create random item
-	for (i = 0; i <= 10; i++) {
+	for (i = 0; i <= mt; i++) {
 		x = rand() % MAP_WIDTH-2;
 		y = rand() % MAP_HEIGHT - 2;
 		
 		if (item[x][y] == 0) item[x][y] = 1;
+		else i--;
+	}
+	
+	for (i = 0; i <= dp; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 3;
+		else i--;
+	}
+
+	for (i = 0; i <= ca; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 4;
+		else i--;
+	}
+
+	for (i = 0; i <= di; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 5;
+		else i--;
+	}
+
+	for (i = 0; i <= tp; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 6;
+		else i--;
+	}
+	
+	for (i = 0; i <= hw; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 7;
+		else i--;
+	}
+	
+	for (i = 0; i <= cl; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 8;
+		else i--;
+	}
+
+	for (i = 0; i <= oc; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 9;
 		else i--;
 	}
 
@@ -481,14 +557,14 @@ void CreateObstacle() {
 		else i--;
 	}
 
-	//Create random obstacle
-	for (i = 0; i <= 10; i++) {
+	//Create random obstacle - for debug
+	/*for (i = 0; i <= 10; i++) {
 		x = rand() % MAP_WIDTH - 2;
 		y = rand() % MAP_HEIGHT - 2;
 
 		if (item[x][y] == 0) item[x][y] = 3;
 		else i--;
-	}
+	}*/
 	
 	//verify - for debug
 	/*for (j = 0; j < row; j++) {
@@ -502,7 +578,7 @@ void CreateObstacle() {
 	//print
 	for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
-			if (item[j][k] == 1) {
+			if (item[j][k] != 0 && item[j][k] != 2) {
 				gotoxy(j+1, k+4);
 				printf("@");
 			}
