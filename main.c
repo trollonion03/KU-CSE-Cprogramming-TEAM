@@ -423,7 +423,7 @@ void CreateObstacle() {
 	memset(map_g, 0, sizeof(map_g));
 	
 	/*for (j = 0; j < row; j++) {
-		for (k = 0; k < col; k++) {
+		for (k = 0; k < col; k++) {  
 			map_g[j][k] = 0;
 		}
 	}*/
