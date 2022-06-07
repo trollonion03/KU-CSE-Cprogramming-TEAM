@@ -1,8 +1,8 @@
 /************************************************************
 *C programming Team project(Treasure hunt Game) by Team 7
 *https://github.com/trollonion03/Cpre_Tp1
-*First build: May 3rd, 2022
-*Latest build: May 30th, 2022
+*First build: May. 3rd, 2022
+*Latest build:JUN. 6th, 2022
 *
 *Target: Windows(x86-64)
 *Language : C(MSVC, v142)
@@ -40,12 +40,12 @@ int32_t map_g[MAP_WIDTH-2][MAP_HEIGHT-2];
 void gotoxy(int32_t, int32_t);
 void init();
 void CreateTitleScreen();
-void Game_Core(int32_T);
+void Game_Core(int32_t);
 void Create_Ground(int16_t, int16_t);
 void movekey(int32_t*, int32_t*);
 void sel_lv(int32_t*);
 void Story();
-void LoadScreen();
+void LoadScreen(uint16_t);
 void CreateObstacle();
 void Endgame();
 
@@ -57,20 +57,24 @@ int32_t main() {
 	int32_t gch, lv;
 	
 	init();
-	//LoadScreen();
+	//LoadScreen(1);
 	CreateTitleScreen();
+	
 	
 	//TODO: getch() -> kbhit()
 	gch = _getch();
 	if (gch == 'y' || gch == 'Y') {
 		//Automatically move on to the next function
 		Story();
-		sel_lv(&lv);
 	}
 	else
 		return 0;
-	Game_Core(lv);
 	
+	while (1) {
+		sel_lv(&lv);
+		LoadScreen(2);
+		Game_Core(lv);
+	}
 }
 
 void gotoxy(int32_t x, int32_t y) {
@@ -122,21 +126,45 @@ void CreateTitleScreen() {
 	}
 }
 
-void LoadScreen() {
+void LoadScreen(uint16_t sc) {
 	uint8_t* ch;
-	int32_t i;
-
+	int32_t i, length;
+	
 	system("cls");
-	gotoxy(26, 7); printf("LOADING...");
-	gotoxy(12, 8); printf("-------------------------------------");
-	gotoxy(12, 9); printf("|                                   |");
-	gotoxy(12, 10); printf("-------------------------------------");
-	gotoxy(13, 9);
-	ch = "###################################";
-	int32_t length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(50);
+	switch (sc) {
+	case 1:
+		gotoxy(26, 7); printf("LOADING...");
+		gotoxy(12, 8); printf("-------------------------------------");
+		gotoxy(12, 9); printf("|                                   |");
+		gotoxy(12, 10); printf("-------------------------------------");
+		gotoxy(13, 9);
+		ch = "###################################";
+		length = strlen(ch);
+		for (i = 0; i < length; i++) {
+			printf("%c", ch[i]);
+			Sleep(50);
+		} break;
+	case 2:
+		gotoxy(11, 6);  printf("|¡à game.konkuk.ac.kr:23/loading/tips   |");
+		gotoxy(59, 6);  printf("¢¸|¢º |X|");
+		gotoxy(11, 7);  printf("---------------------------------------------------------");
+		gotoxy(11, 8);  printf("|                                                       |");
+		gotoxy(11, 9);  printf("|                                                       |");
+		gotoxy(11, 10); printf("|                                                       |");
+		gotoxy(11, 11); printf("|                       Loading..                       |");
+		gotoxy(11, 12); printf("|                                                       |");
+		gotoxy(11, 13); printf("---------------------------------------------------------");
+
+		gotoxy(22, 12);
+		ch = "¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á";
+		length = strlen(ch);
+		for (i = 0; i < length; i++) {
+			printf("%c", ch[i]);
+			Sleep(50);
+		}break;
+
+	default:
+		break;
 	}
 	Sleep(200);
 }
@@ -292,7 +320,7 @@ void sel_lv(int32_t *lv) {
 void Game_Core(int32_t lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
-	int32_t px = 0, py = 0, count = 0;
+	int32_t px = 0, py = 0, count = 0, count2 = 0;
 
 	system("cls");
 	printf("--------------------------------------------------------\n");
@@ -315,20 +343,30 @@ void Game_Core(int32_t lvs) {
 	printf("--------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	CreateObstacle();
+	px = 1; py = 4;
 	//gotoxy(7, 7);
 	//printf("¡Ü");
 
-	//if you use Debugger, Set a breakpoint on line 327
+	//if you use Debugger, Set a breakpoint on line 354
+	//if you want status on another postion, use gotoxy(px, py); after new function ended!
+	//TODO: need to fix
 	while (1) {
+		if (count2 == 0)
+			px = 1; py = 4; count2++;
+
 		movekey(&px, &py);
 		if (map_g[px - 1][py - 4] == 1) {
 			map_g[px - 1][py - 4] = 0;
 			count++;
-			if (count == 10) 
+			if (count == 10) {
+				count = 0;
+				count2= 0;
 				break;
-		} //need to fix
+			}
+		}
 
-		/*if (px == 7 && py == 7) {
+		/* for test
+		if (px == 7 && py == 7) {
 			printf("\b   ");
 			gotoxy(0, 18);
 			break;
@@ -337,7 +375,7 @@ void Game_Core(int32_t lvs) {
 }
 
 void movekey(int32_t *x, int32_t *y) {
-	//TODO: Input-delay needed!
+	//TODO: Add Input-delay
 	static int32_t count, px, py;
 	int32_t ch;
 	
@@ -352,22 +390,22 @@ void movekey(int32_t *x, int32_t *y) {
 		ch = _getch();
 		switch (ch) {
 		case DOWN:
-			if (py > PY_MIN && py < PY_MAX && py + 1 != PY_MAX-1)
+			if (py > PY_MIN && py < PY_MAX && py + 1 != PY_MAX-1 && map_g[px-1][py-3] != 2)
 				py++;
 			break;
 
 		case UP:
-			if (py > PY_MIN && py < PY_MAX && py - 1 != PY_MIN)
+			if (py > PY_MIN && py < PY_MAX && py - 1 != PY_MIN && map_g[px-1][py-5] != 2)
 				py--;
 			break;
 
 		case LEFT:
-			if (px >= PX_MIN && px < PX_MAX && px - 1 != PX_MIN-1)
+			if (px >= PX_MIN && px < PX_MAX && px - 1 != PX_MIN-1 && map_g[px-2][py-4] != 2)
 				px--;		
 			break;
 
 		case RIGHT:
-			if (px >= PX_MIN && px < PX_MAX && px + 1 != PX_MAX-1)
+			if (px >= PX_MIN && px < PX_MAX && px + 1 != PX_MAX-1 && map_g[px][py-4] != 2)
 				px++;
 			break;
 
@@ -385,7 +423,6 @@ void Create_Ground(int16_t x, int16_t y) {
 	*if you use a emoji like '¢·', the emojis consume 2 spaces.
 	*If you want to move one coordinate, you have to move two spaces.
 	*TODO: Find the right ground size
-	*TODO: Create random obstacle....
 	******************************************************************/
 	int32_t i, j;
 
@@ -411,38 +448,53 @@ void CreateObstacle() {
 	/***************************************************************************
 	*Emoji test list
 	*¢Â!@#$%^&*()_+|
+	* -------------------------
+	* Item: 1, wall: 2, obstacle: 3
 	*TODO: Add the verification method to check obstacles are created correctly
+	*TODO: Fix the bug where one more item is generated
 	***************************************************************************/
-	int32_t wall[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
+	int32_t item[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
+	uint16_t count = 0;
 
-	col = sizeof(wall[0]) / sizeof(int32_t);
-	row = sizeof(wall) / sizeof(wall[0]);
+	col = sizeof(item[0]) / sizeof(int32_t);
+	row = sizeof(item) / sizeof(item[0]);
 	
 	//init
 	memset(map_g, 0, sizeof(map_g));
-	
-	/*for (j = 0; j < row; j++) {
-		for (k = 0; k < col; k++) {  
-			map_g[j][k] = 0;
-		}
-	}*/
 
-	//
+	//Create random item
 	for (i = 0; i <= 10; i++) {
 		x = rand() % MAP_WIDTH-2;
 		y = rand() % MAP_HEIGHT - 2;
 		
-		if (wall[x][y] != 1) wall[x][y] = 1;
+		if (item[x][y] == 0) item[x][y] = 1;
+		else i--;
+	}
+
+	//Create random wall
+	for (i = 0; i <= 20; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 2;
+		else i--;
+	}
+
+	//Create random obstacle
+	for (i = 0; i <= 10; i++) {
+		x = rand() % MAP_WIDTH - 2;
+		y = rand() % MAP_HEIGHT - 2;
+
+		if (item[x][y] == 0) item[x][y] = 3;
 		else i--;
 	}
 	
-	
-	//verify	
+	//verify - for debug
 	/*for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
-			if (wall[j][k] == 1) {
-				
+			if (item[j][k] == 1) {
+				count++;
 			}
 		}
 	}*/
@@ -450,16 +502,20 @@ void CreateObstacle() {
 	//print
 	for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
-			if (wall[j][k] == 1) {
+			if (item[j][k] == 1) {
 				gotoxy(j+1, k+4);
 				printf("@");
+			}
+			else if (item[j][k] == 2) {
+				gotoxy(j+1, k+4);
+				printf("#");
 			}
 		}
 	}
 
 	//copy
-	memmove(map_g, wall, sizeof(wall));
-	memset(wall, 0, sizeof(wall));
+	memmove(map_g, item, sizeof(item));
+	memset(item, 0, sizeof(item));
 }
 
 void Endgame() {
