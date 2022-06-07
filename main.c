@@ -549,7 +549,7 @@ void CreateObstacle(int32_t lv) {
 	}
 
 	//Create random wall
-	for (i = 0; i <= 20; i++) {
+	for (i = 0; i <= 40; i++) {
 		x = rand() % MAP_WIDTH - 2;
 		y = rand() % MAP_HEIGHT - 2;
 
