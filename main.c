@@ -48,6 +48,8 @@ void Story();
 void LoadScreen(uint16_t);
 void CreateObstacle(int32_t lv);
 void Endgame();
+void GameOver(int32_t);
+void GameClear(int32_t);
 
 int32_t main() {
 	/***********************************************
@@ -256,20 +258,6 @@ void sel_lv(int32_t *lv) {
 	gotoxy(6, 17); printf("|                                                                 |");
 	gotoxy(6, 18); printf("-------------------------------------------------------------------");
 
-	/*
-	printf("--------------------------------------------------------\n");
-	gotoxy(2, 4); printf("▷ 1학년");
-	gotoxy(2, 5); printf("◆◇◇◇\n");
-
-	gotoxy(2, 7); printf("▷ 2학년");
-	gotoxy(2, 8); printf("◆◆◇◇");
-
-	gotoxy(2, 10);printf("▷ 3학년");
-	gotoxy(2, 11); printf("◆◆◆◇");
-
-	gotoxy(2, 13); printf("▷ 4학년");
-	gotoxy(2, 14); printf("◆◆◆◆");
-	*/
 	while (1) {
 		gotoxy(y, 9);
 		printf("▣");
@@ -346,8 +334,7 @@ void Game_Core(int32_t lvs) {
 	CreateObstacle(lvs);
 	px = 1; py = 4;
 	score = 0; hp = 100;
-	//gotoxy(7, 7);
-	//printf("●");
+	
 	//if you want status on another postion, use gotoxy(px, py); after new function ended!
 	//TODO: Add game over & game clear conditions
 	while (1) {
@@ -396,22 +383,6 @@ void Game_Core(int32_t lvs) {
 		else if (hp <= 0) {
 
 		}
-
-		/*if (map_g[px - 1][py - 4] == 1) {
-			map_g[px - 1][py - 4] = 0;
-			count++;
-			if (count == 10) {
-				count = 0;
-				break;
-			}
-		}*/
-
-		/* for test
-		if (px == 7 && py == 7) {
-			printf("\b   ");
-			gotoxy(0, 18);
-			break;
-		}*/
 	}	
 }
 
@@ -590,31 +561,13 @@ void CreateObstacle(int32_t lv) {
 	}
 
 	//Create random wall
-	for (i = 0; i <= 100; i++) {
+	for (i = 0; i <= 70; i++) {
 		x = rand() % MAP_WIDTH - 2;
 		y = rand() % MAP_HEIGHT - 2;
 
 		if (item[x][y] == 0) item[x][y] = 2;
 		else i--;
 	}
-
-	//Create random obstacle - for debug
-	/*for (i = 0; i <= 10; i++) {
-		x = rand() % MAP_WIDTH - 2;
-		y = rand() % MAP_HEIGHT - 2;
-
-		if (item[x][y] == 0) item[x][y] = 3;
-		else i--;
-	}*/
-	
-	//verify - for debug
-	/*for (j = 0; j < row; j++) {
-		for (k = 0; k < col; k++) {
-			if (item[j][k] == 1) {
-				count++;
-			}
-		}
-	}*/
 
 	//print
 	for (j = 0; j < row; j++) {
@@ -637,6 +590,14 @@ void CreateObstacle(int32_t lv) {
 
 void Endgame() {
 	
+}
+
+void GameOver(int32_t count) {
+
+}
+
+void GameClear(int32_t count) {
+
 }
 
 /*TEST_BED
