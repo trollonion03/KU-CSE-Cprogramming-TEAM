@@ -84,7 +84,7 @@ void gotoxy(int32_t x, int32_t y) {
 
 void init() {
 	//system("mode con cols=56 lines=20 | title test"); //Display option and windows name - for release
-	srand((unsigned int)time(NULL));
+	srand((uint32_t)time(NULL));
 }
 
 void CreateTitleScreen() {
@@ -321,6 +321,7 @@ void Game_Core(int32_t lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
 	int32_t px = 0, py = 0, count = 0, count2 = 0;
+	int32_t score, hp;
 
 	system("cls");
 	printf("--------------------------------------------------------\n");
@@ -344,10 +345,9 @@ void Game_Core(int32_t lvs) {
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	CreateObstacle(lvs);
 	px = 1; py = 4;
+	score = 0; hp = 100;
 	//gotoxy(7, 7);
 	//printf("¡Ü");
-
-	//if you use Debugger, Set a breakpoint on line 354
 	//if you want status on another postion, use gotoxy(px, py); after new function ended!
 	//TODO: Add game over & game clear conditions
 	while (1) {
@@ -355,12 +355,53 @@ void Game_Core(int32_t lvs) {
 			px = 1; py = 4; count2++;
 
 		movekey(&px, &py);
+		switch (map_g[px - 1][py - 4]) {
+		case 1:
+			score += 30;
+			map_g[px - 1][py - 4] = 0;
+			break;
+		case 3:
+			score += 20;
+			map_g[px - 1][py - 4] = 0;
+			break;
+		case 4:
+			score += 10;
+			map_g[px - 1][py - 4] = 0;
+			break;
+		case 5:
+			score += 10;
+			map_g[px - 1][py - 4] = 0;
+			break;
+		case 6:
+			hp -= 30;
+			map_g[px - 1][py - 4] = 0;
+			break;
+		case 7:
+			hp -= 20;
+			map_g[px - 1][py - 4] = 0;
+			break;
+		case 8:
+			hp -= 20;
+			map_g[px - 1][py - 4] = 0;
+			break;
+		case 9:
+			hp -= 10;
+			map_g[px - 1][py - 4] = 0;
+			break;
+		}
+
+		if (score <= 100) {
+
+		}
+		else if (hp <= 0) {
+
+		}
+
 		/*if (map_g[px - 1][py - 4] == 1) {
 			map_g[px - 1][py - 4] = 0;
 			count++;
 			if (count == 10) {
 				count = 0;
-				count2= 0;
 				break;
 			}
 		}*/
@@ -549,7 +590,7 @@ void CreateObstacle(int32_t lv) {
 	}
 
 	//Create random wall
-	for (i = 0; i <= 40; i++) {
+	for (i = 0; i <= 100; i++) {
 		x = rand() % MAP_WIDTH - 2;
 		y = rand() % MAP_HEIGHT - 2;
 
