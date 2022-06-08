@@ -469,7 +469,7 @@ void CreateObstacle(int32_t lv) {
 	int32_t item[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
 	uint16_t count = 0;
-	int32_t mt, dp, ca, di, tp, hw, cl, oc; //without wall
+	int32_t mt=0, dp=0, ca=0, di=0, tp=0, hw=0, cl=0, oc=0; //without wall
 
 	switch (lv) {
 	case 1:
