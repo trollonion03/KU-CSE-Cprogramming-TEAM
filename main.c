@@ -377,11 +377,11 @@ void Game_Core(int32_t lvs) {
 			break;
 		}
 
-		if (score <= 100) {
-
+		if (score <= 100 && hp > 0) {
+			GameClear(lvs);
 		}
 		else if (hp <= 0) {
-
+			GameOver(count);
 		}
 	}	
 }
@@ -593,7 +593,16 @@ void Endgame() {
 }
 
 void GameOver(int32_t count) {
-
+	system("cls");
+	gotoxy(11, 6);  printf("|¡à game.konkuk.ac.kr:23/GameOver   |");
+	gotoxy(59, 6);  printf("¢¸|¢º |X|");
+	gotoxy(11, 7);  printf("---------------------------------------------------------");
+	gotoxy(11, 8);  printf("|                      Game Over!                       |");
+	gotoxy(11, 9);  printf("|                                                       |");
+	gotoxy(11, 10); printf("|                                                       |");
+	gotoxy(11, 11); printf("|                                                       |");
+	gotoxy(11, 12); printf("|                                                       |");
+	gotoxy(11, 13); printf("---------------------------------------------------------");
 }
 
 void GameClear(int32_t count) {
