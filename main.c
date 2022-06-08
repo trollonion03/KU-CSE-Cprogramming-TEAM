@@ -22,30 +22,34 @@
 #define RIGHT 77
 #define UP 72
 #define DOWN 80
-#define MAP_WIDTH 40
-#define MAP_HEIGHT 16
+#define MAP_WIDTH 50
+#define MAP_HEIGHT 18
 #define PY_MIN 3
-#define PY_MAX 19
+#define PY_MAX 21
 #define PX_MIN 1
-#define PX_MAX 40
+#define PX_MAX 50
 #define POS_S1 12
 #define POS_S2 27
 #define POS_S3 42
 #define POS_S4 57
-
+#define BLK 0
+#define WTE 7
+#define YLW 14
+#define SC2 2
 //Global variables
 int32_t map_g[MAP_WIDTH-2][MAP_HEIGHT-2];
 
 //functions
 void gotoxy(int32_t, int32_t);
 void init();
+void CngTxtClr(uint16_t);
 void CreateTitleScreen();
 void Game_Core(int32_t);
 void Create_Ground(int16_t, int16_t);
 void movekey(int32_t*, int32_t*);
 void sel_lv(int32_t*);
 void Story();
-void LoadScreen(uint16_t);
+void LoadScreen(uint16_t, int32_t);
 void CreateObstacle(int32_t lv);
 void Endgame();
 void GameOver(int32_t);
@@ -56,25 +60,24 @@ int32_t main() {
 	*Modularize it as much as possible
 	*Use this function to import other functions
 	***********************************************/
-	int32_t gch, lv;
+	int32_t gch,g, lv;
 	
 	init();
-	//LoadScreen(1);
 	CreateTitleScreen();
-	
-	
-	//TODO: getch() -> kbhit()
 	gch = _getch();
-	if (gch == 'y' || gch == 'Y') {
+	if (gch != 'Q' && gch != 'q') {
 		//Automatically move on to the next function
 		Story();
+		g = _getch();
+		if (g == 'Q' || g == 'q')
+			return 0;
 	}
 	else
 		return 0;
 	
 	while (1) {
 		sel_lv(&lv);
-		LoadScreen(2);
+		LoadScreen(SC2, lv);
 		Game_Core(lv);
 	}
 }
@@ -87,6 +90,10 @@ void gotoxy(int32_t x, int32_t y) {
 void init() {
 	//system("mode con cols=56 lines=20 | title test"); //Display option and windows name - for release
 	srand((uint32_t)time(NULL));
+}
+
+void CngTxtClr(uint16_t clr) {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr);
 }
 
 void CreateTitleScreen() {
@@ -105,8 +112,10 @@ void CreateTitleScreen() {
 	gotoxy(11, 11); printf("|                       Loading..                       |");
 	gotoxy(11, 12); printf("|                                                       |");
 	gotoxy(11, 13); printf("---------------------------------------------------------");
+	gotoxy(68, 22); printf("| Q: exit |");
 
 	gotoxy(22, 12);
+	CngTxtClr(YLW);
 	ch = "■■■■■■■■■■■■■■■■■■";      
 	int32_t length = strlen(ch);
 	for (i = 0; i < length; i++) {
@@ -114,21 +123,24 @@ void CreateTitleScreen() {
 		Sleep(50);
 	}
 	Sleep(200);
+	CngTxtClr(WTE);
 
 	gotoxy(28, 14);
 	Sleep(100);
 
 	//Print one character per 0.1 second
 	//TODO: change "press y key" to "press any key"
-	ch = "Press 'Y' key to start!";
+	ch = "Press any key to start!";
 	length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
 		Sleep(100);
 	}
+
+	
 }
 
-void LoadScreen(uint16_t sc) {
+void LoadScreen(uint16_t sc, int32_t lv) {
 	uint8_t* ch;
 	int32_t i, length;
 	
@@ -156,14 +168,17 @@ void LoadScreen(uint16_t sc) {
 		gotoxy(11, 11); printf("|                       Loading..                       |");
 		gotoxy(11, 12); printf("|                                                       |");
 		gotoxy(11, 13); printf("---------------------------------------------------------");
+		
+		gotoxy(27, 9); printf("%d학년을 무사히 마치시오!!", lv);
 
 		gotoxy(22, 12);
+		CngTxtClr(YLW);
 		ch = "■■■■■■■■■■■■■■■■■■";
 		length = strlen(ch);
 		for (i = 0; i < length; i++) {
 			printf("%c", ch[i]);
-			Sleep(50);
-		}break;
+			Sleep(25);
+		}CngTxtClr(WTE);  break; 
 
 	default:
 		break;
@@ -197,7 +212,7 @@ void Story() {
 	int32_t length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
-		Sleep(50);
+		Sleep(25);
 	}
 
 	gotoxy(8, 10);
@@ -205,7 +220,7 @@ void Story() {
 	length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
-		Sleep(50);
+		Sleep(25);
 	}
 
 	gotoxy(8, 12);
@@ -213,7 +228,7 @@ void Story() {
 	length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
-		Sleep(50);
+		Sleep(25);
 	}
 
 	gotoxy(8, 14);
@@ -221,7 +236,7 @@ void Story() {
 	length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
-		Sleep(50);
+		Sleep(25);
 	}
 
 	gotoxy(8, 16);
@@ -229,10 +244,10 @@ void Story() {
 	length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
-		Sleep(50);
+		Sleep(25);
 	}
-
-	Sleep(500);
+	
+	gotoxy(28, 19); printf("Press any key to start");
 }
 
 void sel_lv(int32_t *lv) {
@@ -377,11 +392,16 @@ void Game_Core(int32_t lvs) {
 			break;
 		}
 
-		if (score <= 100 && hp > 0) {
+		if (score >= 100 && hp > 0) {
 			GameClear(lvs);
+			Sleep(500);
+			break;
 		}
-		else if (hp <= 0) {
+		else if (hp < 1) {
+			count++;
 			GameOver(count);
+			Sleep(500);
+			break;
 		}
 	}	
 }
@@ -396,9 +416,6 @@ void movekey(int32_t *x, int32_t *y) {
 		count++;
 	}
 	else {
-		printf("\b ");
-		gotoxy(px, py);
-		printf("!");
 		ch = _getch();
 		switch (ch) {
 		case DOWN:
@@ -424,6 +441,9 @@ void movekey(int32_t *x, int32_t *y) {
 		default:
 			break;
 		}
+		printf("\b ");
+		gotoxy(px, py);
+		printf("A");
 		*x = px;
 		*y = py;
 	}
@@ -438,22 +458,33 @@ void Create_Ground(int16_t x, int16_t y) {
 	******************************************************************/
 	int32_t i, j;
 
+	CngTxtClr(YLW);
 	for (i = 1; i <= x; i++) {
-		printf("#");
+		printf("|");
 	}
 	printf("\n");
 	for (i = 1; i <= y - 2; i++) {
-		printf("#");
+		printf("|");
 		for (j = 1; j <= x - 2; j++) {
 			printf(" ");
 		}
-		printf("#\n");
+		printf("|\n");
 	}
 	for (i = 1; i <= x; i++) {
-		printf("#");
+		printf("|");
+	}
+
+	gotoxy(0, 3);
+	for (i = 0; i < 25; i++) {
+		printf("■");
+	}
+	
+	gotoxy(0, 20);
+	for (i = 0; i < 25; i++) {
+		printf("■");
 	}
 	printf("\n");
-
+	CngTxtClr(WTE);
 }
 
 void CreateObstacle(int32_t lv) {
@@ -464,7 +495,7 @@ void CreateObstacle(int32_t lv) {
 	* MT: 1, wall: 2, drinking party: 3, class absence: 4
 	* dining : 5, Team project: 6, homework: 7,  class: 8, online class: 9
 	*TODO: Add the verification method to check obstacles are created correctly
-	*TODO: Fix the bug where one more item is generated
+	*TODO: Add spawn area protection
 	***************************************************************************/
 	int32_t item[MAP_WIDTH - 2][MAP_HEIGHT - 2] = { 0, };
 	int32_t i, j, k, x, y, col, row;
@@ -578,7 +609,9 @@ void CreateObstacle(int32_t lv) {
 			}
 			else if (item[j][k] == 2) {
 				gotoxy(j+1, k+4);
+				CngTxtClr(YLW);
 				printf("#");
+				CngTxtClr(WTE);
 			}
 		}
 	}
@@ -593,6 +626,7 @@ void Endgame() {
 }
 
 void GameOver(int32_t count) {
+	int32_t g;
 	system("cls");
 	gotoxy(11, 6);  printf("|□ game.konkuk.ac.kr:23/GameOver   |");
 	gotoxy(59, 6);  printf("◀|▶ |X|");
@@ -603,10 +637,79 @@ void GameOver(int32_t count) {
 	gotoxy(11, 11); printf("|                                                       |");
 	gotoxy(11, 12); printf("|                                                       |");
 	gotoxy(11, 13); printf("---------------------------------------------------------");
+	switch (count) {
+	case 1:
+		gotoxy(27, 11); printf("너무 무리를 하셨군요");
+		gotoxy(26, 13); printf("때로는 휴식이 필요합니다.");
+		break;
+	case 2:
+		gotoxy(27, 11); printf("너무 많은 수업에 지쳐 버렸습니다.");
+		gotoxy(25, 13); printf("오늘 하루는 침대와 한 몸이 되어보세요");
+		break;
+	case 3:
+		gotoxy(22, 11); printf("감당할 수 없는 과제에 체력이 다 닳았습니다.");
+		gotoxy(27, 13); printf("힐링 할 시간이 필요합니다");
+		break;
+	case 4:
+		gotoxy(30, 11); printf("팀플에 모든 힘을 쏟아낸 당신");
+		gotoxy(29, 13); printf("꼬박 하루동안 잠에 들게 됩니다.");
+		break;
+	default:
+		gotoxy(30, 11); printf("어디선가 전화가 걸려옵니다");
+		gotoxy(29, 13); printf("\"오랬동안 자네를 봐 왔네,,");
+		gotoxy(27, 13); printf("자네,, 대학원에 올 생각은 없나??\"");
+		break;
+	}
+	
+	g = _getch();
+	if (g != 'q' || g != 'Q') {
+
+	}
+	else {
+
+	}
 }
 
-void GameClear(int32_t count) {
+void GameClear(int32_t lv) {
+	int32_t g;
+	system("cls");
+	gotoxy(11, 6);  printf("|□ game.konkuk.ac.kr:23/GameClear   |");
+	gotoxy(59, 6);  printf("◀|▶ |X|");
+	gotoxy(11, 7);  printf("---------------------------------------------------------");
+	gotoxy(11, 8);  printf("|                     Game Clear!                       |");
+	gotoxy(11, 9);  printf("|                                                       |");
+	gotoxy(11, 10); printf("|                                                       |");
+	gotoxy(11, 11); printf("|                                                       |");
+	gotoxy(11, 12); printf("|                                                       |");
+	gotoxy(11, 13); printf("---------------------------------------------------------");
+	gotoxy(27, 11);
+	switch (lv) {
+	case 1: 
+		gotoxy(27, 11); printf("건대에서 첫 해를 성공적으로 마친 당신");
+		gotoxy(28, 13); printf("새내기를 벗어나신 것을 축하합니다!");
+		break;
+	case 2:
+		gotoxy(25, 11); printf("건대에서 두번째 해를 성공적으로 마친 당신");
+		gotoxy(27, 13); printf("벌써 대학생활의 반을 끝낸 것을 축하합니다!");
+		break;
+	case 3:
+		gotoxy(25, 11); printf("건대에서 세번째 해를 성공적으로 마친 당신");
+		gotoxy(13, 13); printf("이제 졸업까지 한 해밖에 남지 않은 것을 축하합니다!");
+		break;
+	case 4:
+		gotoxy(22, 11); printf("건대에서 마지막 해까지 성공적으로 마친 당신");
+		gotoxy(29, 13); printf("졸업을 축하합니다!");
+		break;
+	default:
+		break;
+	}
+	g = _getch();
+	if (g != 'q' || g != 'Q') {
 
+	}
+	else {
+
+	}
 }
 
 /*TEST_BED
