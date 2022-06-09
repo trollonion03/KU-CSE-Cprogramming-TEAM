@@ -128,7 +128,7 @@ void CreateTitleScreen() {
 	int32_t length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
-		Sleep(50);
+		Sleep(25);
 	}
 	Sleep(200);
 	CngTxtClr(WTE);
@@ -277,9 +277,10 @@ void sel_lv(int32_t *lv) {
 	gotoxy(6, 13); printf("|     ■ 설명                                                     |");
 	gotoxy(6, 14); printf("|     | 1. 클리어 조건 : 만족도 100 채우기                        |");
 	gotoxy(6, 15); printf("|     | 2. 실패 조건   : 체력 100 모두 소모                       |");
-	gotoxy(6, 16); printf("|     | 3.                                                        |");
-	gotoxy(6, 17); printf("|                                                                 |");
-	gotoxy(6, 18); printf("-------------------------------------------------------------------");
+	gotoxy(6, 16); printf("|     | 3. 장애물(#)을 피해서 @를 찾아가세요!!                    |");
+	gotoxy(6, 17); printf("|     | 4. 플레이어는 초록색 O 입니다!!                           |");
+	gotoxy(6, 18); printf("|                                                                 |");
+	gotoxy(6, 19); printf("-------------------------------------------------------------------");
 	gotoxy(68, 22); printf("| Q: exit |");
 
 	while (1) {
