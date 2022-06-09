@@ -386,7 +386,7 @@ void Game_Core(int32_t lvs) {
 		case 4:
 			score += 10;
 			hp += 10;
-			map_g[px - 1][py - 4] = 0;
+			map_g[px - 1][py - 4] = 0; 
 			st = 4;
 			break;
 		case 5:
@@ -735,7 +735,7 @@ void GameOver(int32_t count) {
 		gotoxy(26, 12); printf("때로는 휴식이 필요합니다.");
 		break;
 	case 2:
-		gotoxy(27, 11); printf("너무 많은 수업에 지쳐 버렸습니다.");
+		gotoxy(23, 11); printf("너무 많은 수업에 지쳐 버렸습니다.");
 		gotoxy(20, 12); printf("오늘 하루는 침대와 한 몸이 되어보세요");
 		break;
 	case 3:
@@ -775,7 +775,7 @@ void GameClear(int32_t lv) {
 	gotoxy(11, 11); printf("|                                                       |");
 	gotoxy(11, 12); printf("|                                                       |");
 	gotoxy(11, 13); printf("---------------------------------------------------------");
-	gotoxy(32, 14); printf("Press Any Key!!");
+	gotoxy(27, 14); printf("Press Any Key to next Level");
 	gotoxy(27, 11);
 	switch (lv) {
 	case 1: 
@@ -797,13 +797,14 @@ void GameClear(int32_t lv) {
 	default:
 		break;
 	}
-	gotoxy(68, 22); printf("| Q: exit |");
+	gotoxy(61, 22); printf("| Q: Main menu |");
 	g = _getch();
 	if (g != 'q' && g != 'Q') {
-
+		if (lv < 4) 
+			Game_Core(lv + 1);
 	}
-	else {
-		exit(0);
+	else if(g == 'q' || g == 'Q')  {
+
 	}
 }
 
