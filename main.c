@@ -8,7 +8,6 @@
 *Language : C(MSVC, v142)
 ************************************************************/
 
-//#pragma warning(disable:6031) //for scanf, test
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <Windows.h>
@@ -70,7 +69,6 @@ int32_t main() {
 	CreateTitleScreen();
 	gch = _getch();
 	if (gch != 'Q' && gch != 'q') {
-		//Automatically move on to the next function
 		Story();
 		g = _getch();
 		if (g == 'Q' || g == 'q')
@@ -92,7 +90,7 @@ void gotoxy(int32_t x, int32_t y) {
 }
 
 void init() {
-	//system("mode con cols=56 lines=20 | title test"); //Display option and windows name - for release
+	//system("mode con cols=79 lines=23 | title game"); //Display option and windows name - for release
 	srand((uint32_t)time(NULL));
 	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
 	cursorInfo.dwSize = 1; 
@@ -363,7 +361,6 @@ void Game_Core(int32_t lvs) {
 	px = 1; py = 4;
 	score = 0; hp = 100;
 	
-	//if you want status on another postion, use gotoxy(px, py); after new function ended!
 	//TODO: Add game over & game clear conditions
 	while (1) {
 		if (count2 == 0)
@@ -807,34 +804,3 @@ void GameClear(int32_t lv) {
 
 	}
 }
-
-/*TEST_BED
-	-------------------------------------------------------------------------------
-
-									  ==========
-									 ||레벨선택||
-									  ==========
-																	◀|▶ |X|
-		  -------------------------------------------------------------------
-		  |                                                                 |
-		  |     ▼                                                          |
-		  |     |1학년   |     |2학년   |     |3학년   |     |4학년   |     |
-		  |     |◆◇◇◇|     |◆◆◇◇|     |◆◆◆◇|     |◆◆◆◆|     |
-		  |                                                                 |
-		  |     ■설명                                                      |
-		  |     |                                                           |
-		  |     |                                                           |
-		  |     |                                                           |
-		  |                                                                 |
-		  -------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-	-------------------------------------------------------------------------------
-	*/
