@@ -36,6 +36,9 @@
 #define WTE 7
 #define YLW 14
 #define SC2 2
+#define GRE 10
+#define RED 12
+
 //Global variables
 int32_t map_g[MAP_WIDTH-2][MAP_HEIGHT-2];
 uint16_t d_t = 0;
@@ -52,7 +55,7 @@ void sel_lv(int32_t*);
 void Story();
 void LoadScreen(uint16_t, int32_t);
 void CreateObstacle(int32_t lv);
-void StatusPrint(uint16_t, int32_t);
+void StatusPrint(uint16_t, int32_t, int32_t, int32_t);
 void GameOver(int32_t);
 void GameClear(int32_t);
 
@@ -91,6 +94,10 @@ void gotoxy(int32_t x, int32_t y) {
 void init() {
 	//system("mode con cols=56 lines=20 | title test"); //Display option and windows name - for release
 	srand((uint32_t)time(NULL));
+	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+	cursorInfo.dwSize = 1; 
+	cursorInfo.bVisible = FALSE;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
 void CngTxtClr(uint16_t clr) {
@@ -270,21 +277,30 @@ void sel_lv(int32_t *lv) {
 	gotoxy(6, 13); printf("|     ■ 설명                                                     |");
 	gotoxy(6, 14); printf("|     | 1. 클리어 조건 : 만족도 100 채우기                        |");
 	gotoxy(6, 15); printf("|     | 2. 실패 조건   : 체력 100 모두 소모                       |");
-	gotoxy(6, 16); printf("|     | 3. 랜덤으로 미니게임이 나타납니다?!!                      |");
+	gotoxy(6, 16); printf("|     | 3.                                                        |");
 	gotoxy(6, 17); printf("|                                                                 |");
 	gotoxy(6, 18); printf("-------------------------------------------------------------------");
+	gotoxy(68, 22); printf("| Q: exit |");
 
 	while (1) {
+		CngTxtClr(YLW);
 		gotoxy(y, 9);
-		printf("▣");
+		printf("▽_______");
+		CngTxtClr(WTE);
 		gch1 = _getch();
-		printf("\b\b  ");
+		printf("\b\b\b\b\b\b\b\b\b         ");
 		switch (gch1) {
 		case RIGHT:
 			count++;
 			break;
 		case LEFT:
 			count--;
+			break;
+		case 'q':
+			exit(0);
+			break;
+		case 'Q':
+			exit(0);
 			break;
 		default:
 			break;
@@ -324,7 +340,7 @@ void sel_lv(int32_t *lv) {
 void Game_Core(int32_t lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
-	int32_t px = 0, py = 0, count = 0, count2 = 0;
+	int32_t px = 0, py = 0, count = 0, count2 = 0, st = 0;
 	int32_t score, hp;
 
 	system("cls");
@@ -334,8 +350,15 @@ void Game_Core(int32_t lvs) {
 	printf("-------------------------------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	CreateObstacle(lvs);
-	gotoxy(0, 21);
-	
+	gotoxy(0, 21); printf("| 아이템 설명                                                                 |");
+	gotoxy(0, 22); printf("|                                                                             |");
+	gotoxy(0, 23); printf("-------------------------------------------------------------------------------");
+	gotoxy(65, 22); printf("|");
+	gotoxy(52, 15); printf("조작키");
+	gotoxy(52, 16); printf("↑ ↓ ← →");
+	gotoxy(52, 18); printf("목표");
+	gotoxy(52, 19); printf("만족도를 100점 채우시오");
+
 	px = 1; py = 4;
 	score = 0; hp = 100;
 	
@@ -344,41 +367,51 @@ void Game_Core(int32_t lvs) {
 	while (1) {
 		if (count2 == 0)
 			px = 1; py = 4; count2++;
-
+		StatusPrint(d_t, score, hp, st);
 		movekey(&px, &py);
 		
 		switch (map_g[px - 1][py - 4]) {
 		case 1:
 			score += 30;
 			map_g[px - 1][py - 4] = 0;
+			st = 1;
 			break;
 		case 3:
 			score += 20;
+			hp -= 10;
 			map_g[px - 1][py - 4] = 0;
+			st = 3;
 			break;
 		case 4:
 			score += 10;
+			hp += 10;
 			map_g[px - 1][py - 4] = 0;
+			st = 4;
 			break;
 		case 5:
 			score += 10;
 			map_g[px - 1][py - 4] = 0;
+			st = 5;
 			break;
 		case 6:
 			hp -= 30;
 			map_g[px - 1][py - 4] = 0;
+			st = 6;
 			break;
 		case 7:
 			hp -= 20;
 			map_g[px - 1][py - 4] = 0;
+			st = 7;
 			break;
 		case 8:
 			hp -= 20;
 			map_g[px - 1][py - 4] = 0;
+			st = 8;
 			break;
 		case 9:
 			hp -= 10;
 			map_g[px - 1][py - 4] = 0;
+			st = 9;
 			break;
 		}
 
@@ -402,7 +435,9 @@ void movekey(int32_t *x, int32_t *y) {
 	int32_t ch;
 
 	gotoxy(px, py);
+	CngTxtClr(GRE);
 	printf("O");
+	CngTxtClr(WTE);
 	
 	if (count == 0) {
 		px = 1; py = 4;
@@ -436,7 +471,9 @@ void movekey(int32_t *x, int32_t *y) {
 		}
 		printf("\b ");
 		gotoxy(px, py);
+		CngTxtClr(GRE);
 		printf("O");
+		CngTxtClr(WTE);
 		*x = px;
 		*y = py;
 	}
@@ -522,6 +559,13 @@ void CreateObstacle(int32_t lv) {
 	//init
 	memset(map_g, 0, sizeof(map_g));
 
+	//spawn area protection
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			item[i][j] = 27;
+		}
+	}
+
 	//Create random item
 	for (i = 0; i <= mt; i++) {
 		x = rand() % MAP_WIDTH-2;
@@ -599,7 +643,7 @@ void CreateObstacle(int32_t lv) {
 	//print
 	for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
-			if (item[j][k] != 0 && item[j][k] != 2) {
+			if (item[j][k] != 0 && item[j][k] != 2 && item[j][k] != 27) {
 				gotoxy(j+1, k+4);
 				printf("@");
 			}
@@ -617,8 +661,56 @@ void CreateObstacle(int32_t lv) {
 	memset(item, 0, sizeof(item));
 }
 
-void StatusPrint(uint16_t dt_c, int32_t a) {
-	
+void StatusPrint(uint16_t dt_c, int32_t score, int32_t hp, int32_t st) {
+	//explain about item information (2, 22). 5, 7
+	gotoxy(52, 5); printf("만족도:       "); gotoxy(60, 5); printf("%d", score);
+	gotoxy(52, 7); printf("체력:          "); gotoxy(60, 7); printf("%d", hp);
+	gotoxy(2, 22); printf("                                                              ");
+	gotoxy(2, 22);
+	switch (st) {
+	case 1:
+		printf("대학생활의 묘미인 mt를 간 당신, 만족도가 30 올라갑니다.");
+		gotoxy(67, 22); printf("         ");
+		gotoxy(67, 22); CngTxtClr(GRE); printf("+30  "); CngTxtClr(WTE);
+		break;
+	case 3:
+		printf("술자리에 간 당신, 만족도가 20올라가지만 체력이 10 떨어집니다.");
+		gotoxy(67, 22); printf("         ");
+		gotoxy(67, 22); CngTxtClr(GRE); printf("+20  "); CngTxtClr(RED); printf("-10"); CngTxtClr(WTE);
+		break;
+	case 4:
+		printf("공강이 생긴 당신, 만족도와 체력이 모두 10 올라갑니다.");
+		gotoxy(67, 22); printf("         ");
+		gotoxy(67, 22); CngTxtClr(GRE); printf("+10  "); printf("+10"); CngTxtClr(WTE);
+		break;
+	case 5:
+		printf("밥약속에 간 당신, 만족도가 10 올라갑니다.");
+		gotoxy(67, 22); printf("         ");
+		gotoxy(67, 22); CngTxtClr(GRE); printf("+10  "); CngTxtClr(WTE);
+		break;
+	case 6:
+		printf("팀플을 끝낸 당신… 체력이 30 떨어집니다.");
+		gotoxy(67, 22); printf("         ");
+		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-30"); CngTxtClr(WTE);
+		break;
+	case 7:
+		printf("과제를 끝낸 당신… 체력이 20 떨어집니다.");
+		gotoxy(67, 22); printf("         ");
+		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-20"); CngTxtClr(WTE);
+		break;
+	case 8:
+		printf("대면 수업에 간 당신… 체력이 20 떨어집니다.");
+		gotoxy(67, 22); printf("         ");
+		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-20"); CngTxtClr(WTE);
+		break;
+	case 9:
+		printf("실시간 강의를 들은 당신… 체력이 10 떨어집니다.");
+		gotoxy(67, 22); printf("         ");
+		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-10"); CngTxtClr(WTE);
+		break;
+	default:
+		break;
+	}
 }
 
 void GameOver(int32_t count) {
@@ -633,6 +725,9 @@ void GameOver(int32_t count) {
 	gotoxy(11, 11); printf("|                                                       |");
 	gotoxy(11, 12); printf("|                                                       |");
 	gotoxy(11, 13); printf("---------------------------------------------------------");
+	gotoxy(32, 14); printf("Press Any Key!!");
+	gotoxy(68, 22); printf("| Q: exit |");
+
 	switch (count) {
 	case 1:
 		gotoxy(28, 11); printf("너무 무리를 하셨군요");
@@ -659,11 +754,11 @@ void GameOver(int32_t count) {
 	}
 	
 	g = _getch();
-	if (g != 'q' || g != 'Q') {
+	if (g != 'q' && g != 'Q') {
 
 	}
 	else {
-
+		exit(0);
 	}
 }
 
@@ -679,33 +774,35 @@ void GameClear(int32_t lv) {
 	gotoxy(11, 11); printf("|                                                       |");
 	gotoxy(11, 12); printf("|                                                       |");
 	gotoxy(11, 13); printf("---------------------------------------------------------");
+	gotoxy(32, 14); printf("Press Any Key!!");
 	gotoxy(27, 11);
 	switch (lv) {
 	case 1: 
-		gotoxy(27, 11); printf("건대에서 첫 해를 성공적으로 마친 당신");
-		gotoxy(28, 13); printf("새내기를 벗어나신 것을 축하합니다!");
+		gotoxy(20, 11); printf("건대에서 첫 해를 성공적으로 마친 당신");
+		gotoxy(21, 12); printf("새내기를 벗어나신 것을 축하합니다!");
 		break;
 	case 2:
-		gotoxy(25, 11); printf("건대에서 두번째 해를 성공적으로 마친 당신");
-		gotoxy(27, 13); printf("벌써 대학생활의 반을 끝낸 것을 축하합니다!");
+		gotoxy(18, 11); printf("건대에서 두번째 해를 성공적으로 마친 당신");
+		gotoxy(18, 12); printf("벌써 대학생활의 반을 끝낸 것을 축하합니다!");
 		break;
 	case 3:
-		gotoxy(25, 11); printf("건대에서 세번째 해를 성공적으로 마친 당신");
-		gotoxy(13, 13); printf("이제 졸업까지 한 해밖에 남지 않은 것을 축하합니다!");
+		gotoxy(18, 11); printf("건대에서 세번째 해를 성공적으로 마친 당신");
+		gotoxy(14, 12); printf("이제 졸업까지 한 해밖에 남지 않은 것을 축하합니다!");
 		break;
 	case 4:
 		gotoxy(22, 11); printf("건대에서 마지막 해까지 성공적으로 마친 당신");
-		gotoxy(29, 13); printf("졸업을 축하합니다!");
+		gotoxy(27, 12); printf("졸업을 축하합니다!");
 		break;
 	default:
 		break;
 	}
+	gotoxy(68, 22); printf("| Q: exit |");
 	g = _getch();
-	if (g != 'q' || g != 'Q') {
+	if (g != 'q' && g != 'Q') {
 
 	}
 	else {
-
+		exit(0);
 	}
 }
 
