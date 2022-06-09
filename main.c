@@ -240,7 +240,7 @@ void Story() {
 	}
 
 	gotoxy(8, 14);
-	ch = "건대에서만 볼 수 있는 특별한 동물들까지..!!";
+	ch = "동기, 선배들과 함께하는 엠티까지..!!";
 	length = strlen(ch);
 	for (i = 0; i < length; i++) {
 		printf("%c", ch[i]);
