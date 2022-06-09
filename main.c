@@ -38,6 +38,7 @@
 #define SC2 2
 //Global variables
 int32_t map_g[MAP_WIDTH-2][MAP_HEIGHT-2];
+uint16_t d_t = 0;
 
 //functions
 void gotoxy(int32_t, int32_t);
@@ -51,7 +52,7 @@ void sel_lv(int32_t*);
 void Story();
 void LoadScreen(uint16_t, int32_t);
 void CreateObstacle(int32_t lv);
-void Endgame();
+void StatusPrint(uint16_t, int32_t);
 void GameOver(int32_t);
 void GameClear(int32_t);
 
@@ -327,26 +328,14 @@ void Game_Core(int32_t lvs) {
 	int32_t score, hp;
 
 	system("cls");
-	printf("--------------------------------------------------------\n");
-	if (lvs == 1) {
-		gotoxy(23, 1);
-		printf("%d 학년\n", lvs);
-	}	
-	else if (lvs == 2) {
-		gotoxy(23, 1);
-		printf("%d 학년\n", lvs);
-	}
-	else if (lvs == 3) {
-		gotoxy(23, 1);
-		printf("%d 학년\n", lvs);
-	}
-	else if (lvs == 4) {
-		gotoxy(23, 1);
-		printf("%d 학년\n", lvs);
-	}
-	printf("--------------------------------------------------------\n");
+	printf("\n");
+	gotoxy(70, 1); printf("◀|▶ |X|");
+	gotoxy(0, 1); printf("|□ game.konkuk.ac.kr:23/Stage%d   | %d학년\n", lvs, lvs);
+	printf("-------------------------------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	CreateObstacle(lvs);
+	gotoxy(0, 21);
+	
 	px = 1; py = 4;
 	score = 0; hp = 100;
 	
@@ -357,6 +346,7 @@ void Game_Core(int32_t lvs) {
 			px = 1; py = 4; count2++;
 
 		movekey(&px, &py);
+		
 		switch (map_g[px - 1][py - 4]) {
 		case 1:
 			score += 30;
@@ -398,8 +388,8 @@ void Game_Core(int32_t lvs) {
 			break;
 		}
 		else if (hp < 1) {
-			count++;
-			GameOver(count);
+			d_t++;
+			GameOver(d_t);
 			Sleep(500);
 			break;
 		}
@@ -410,6 +400,9 @@ void movekey(int32_t *x, int32_t *y) {
 	//TODO: Add Input-delay
 	static int32_t count, px, py;
 	int32_t ch;
+
+	gotoxy(px, py);
+	printf("O");
 	
 	if (count == 0) {
 		px = 1; py = 4;
@@ -443,7 +436,7 @@ void movekey(int32_t *x, int32_t *y) {
 		}
 		printf("\b ");
 		gotoxy(px, py);
-		printf("A");
+		printf("O");
 		*x = px;
 		*y = py;
 	}
@@ -473,18 +466,21 @@ void Create_Ground(int16_t x, int16_t y) {
 	for (i = 1; i <= x; i++) {
 		printf("|");
 	}
-
+	
+	CngTxtClr(WTE);
 	gotoxy(0, 3);
-	for (i = 0; i < 25; i++) {
-		printf("■");
-	}
+	for (i = 0; i < 25; i++) printf("■");
+	for (i = 0; i < 29; i++) printf("-");
 	
 	gotoxy(0, 20);
-	for (i = 0; i < 25; i++) {
-		printf("■");
+	for (i = 0; i < 25; i++) printf("■");
+	for (i = 0; i < 29; i++) printf("-");
+
+	for (i = 0; i < 17; i++) {
+		gotoxy(78, i + 3); printf("|");
 	}
+	
 	printf("\n");
-	CngTxtClr(WTE);
 }
 
 void CreateObstacle(int32_t lv) {
@@ -621,7 +617,7 @@ void CreateObstacle(int32_t lv) {
 	memset(item, 0, sizeof(item));
 }
 
-void Endgame() {
+void StatusPrint(uint16_t dt_c, int32_t a) {
 	
 }
 
@@ -639,25 +635,26 @@ void GameOver(int32_t count) {
 	gotoxy(11, 13); printf("---------------------------------------------------------");
 	switch (count) {
 	case 1:
-		gotoxy(27, 11); printf("너무 무리를 하셨군요");
-		gotoxy(26, 13); printf("때로는 휴식이 필요합니다.");
+		gotoxy(28, 11); printf("너무 무리를 하셨군요");
+		gotoxy(26, 12); printf("때로는 휴식이 필요합니다.");
 		break;
 	case 2:
 		gotoxy(27, 11); printf("너무 많은 수업에 지쳐 버렸습니다.");
-		gotoxy(25, 13); printf("오늘 하루는 침대와 한 몸이 되어보세요");
+		gotoxy(20, 12); printf("오늘 하루는 침대와 한 몸이 되어보세요");
 		break;
 	case 3:
-		gotoxy(22, 11); printf("감당할 수 없는 과제에 체력이 다 닳았습니다.");
-		gotoxy(27, 13); printf("힐링 할 시간이 필요합니다");
+		gotoxy(18, 11); printf("감당할 수 없는 과제에 체력이 다 닳았습니다.");
+		gotoxy(26, 12); printf("힐링 할 시간이 필요합니다");
 		break;
 	case 4:
 		gotoxy(30, 11); printf("팀플에 모든 힘을 쏟아낸 당신");
-		gotoxy(29, 13); printf("꼬박 하루동안 잠에 들게 됩니다.");
+		gotoxy(29, 12); printf("꼬박 하루동안 잠에 들게 됩니다.");
 		break;
 	default:
-		gotoxy(30, 11); printf("어디선가 전화가 걸려옵니다");
-		gotoxy(29, 13); printf("\"오랬동안 자네를 봐 왔네,,");
-		gotoxy(27, 13); printf("자네,, 대학원에 올 생각은 없나??\"");
+		gotoxy(25, 10); printf("어디선가 전화가 걸려옵니다");
+		gotoxy(25, 11); printf("\"오랬동안 자네를 봐 왔네,,");
+		gotoxy(22, 12); printf("자네,, 대학원에 올 생각은 없나??\"");
+		d_t = 0;
 		break;
 	}
 	
