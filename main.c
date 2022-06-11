@@ -51,6 +51,7 @@ void Game_Core(int32_t);
 void Create_Ground(int16_t, int16_t);
 void movekey(int32_t*, int32_t*);
 void sel_lv(int32_t*);
+void PrintTextS(uint16_t, uint8_t*);
 void Story();
 void LoadScreen(uint16_t, int32_t);
 void CreateObstacle(int32_t lv);
@@ -105,10 +106,7 @@ void CngTxtClr(uint16_t clr) {
 void CreateTitleScreen() {
 	//TODO: New design required!
 	//x : 56, y : 20
-	uint8_t* ch;
-	int32_t i;
-
-	system("cls");
+		system("cls");
 	gotoxy(11, 6);  printf("|□ game.konkuk.ac.kr:23   |");
 	gotoxy(59, 6);  printf("◀|▶ |X|");
 	gotoxy(11, 7);  printf("---------------------------------------------------------");
@@ -122,12 +120,7 @@ void CreateTitleScreen() {
 
 	gotoxy(22, 12);
 	CngTxtClr(YLW);
-	ch = "■■■■■■■■■■■■■■■■■■";      
-	int32_t length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(25);
-	}
+	PrintTextS(25, "■■■■■■■■■■■■■■■■■■");
 	Sleep(200);
 	CngTxtClr(WTE);
 
@@ -136,20 +129,10 @@ void CreateTitleScreen() {
 
 	//Print one character per 0.1 second
 	//TODO: change "press y key" to "press any key"
-	ch = "Press any key to start!";
-	length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(100);
-	}
-
-	
+	PrintTextS(100, "Press any key to start!");	
 }
 
-void LoadScreen(uint16_t sc, int32_t lv) {
-	uint8_t* ch;
-	int32_t i, length;
-	
+void LoadScreen(uint16_t sc, int32_t lv) {	
 	system("cls");
 	switch (sc) {
 	case 1:
@@ -158,12 +141,8 @@ void LoadScreen(uint16_t sc, int32_t lv) {
 		gotoxy(12, 9); printf("|                                   |");
 		gotoxy(12, 10); printf("-------------------------------------");
 		gotoxy(13, 9);
-		ch = "###################################";
-		length = strlen(ch);
-		for (i = 0; i < length; i++) {
-			printf("%c", ch[i]);
-			Sleep(50);
-		} break;
+		PrintTextS(50, "###################################");
+		break;
 	case 2:
 		gotoxy(11, 6);  printf("|□ game.konkuk.ac.kr:23/loading/tips   |");
 		gotoxy(59, 6);  printf("◀|▶ |X|");
@@ -179,12 +158,8 @@ void LoadScreen(uint16_t sc, int32_t lv) {
 
 		gotoxy(22, 12);
 		CngTxtClr(YLW);
-		ch = "■■■■■■■■■■■■■■■■■■";
-		length = strlen(ch);
-		for (i = 0; i < length; i++) {
-			printf("%c", ch[i]);
-			Sleep(25);
-		}CngTxtClr(WTE);  break; 
+		PrintTextS(50, "■■■■■■■■■■■■■■■■■■");
+		CngTxtClr(WTE);  break; 
 
 	default:
 		break;
@@ -194,8 +169,6 @@ void LoadScreen(uint16_t sc, int32_t lv) {
 
 
 void Story() {
-	uint8_t* ch;
-	int32_t i;
 
 	system("cls");
 	gotoxy(64, 6); printf("◀|▶ |X|");
@@ -214,44 +187,19 @@ void Story() {
 	gotoxy(6, 18); printf("-------------------------------------------------------------------");
 	
 	gotoxy(8, 8);
-	ch = "코로나 팬데믹이라는 상황에도 불구하고 열심히 공부하여";
-	int32_t length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(25);
-	}
+	PrintTextS(25, "코로나 팬데믹이라는 상황에도 불구하고 열심히 공부하여");
 
 	gotoxy(8, 10);
-	ch = "건대 컴공에 합격한 당신!";
-	length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(25);
-	}
+	PrintTextS(25, "건대 컴공에 합격한 당신!");
 
 	gotoxy(8, 12);
-	ch = "비대면 강의부터 대면 강의, 팀플, 과제 그리고";
-	length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(25);
-	}
+	PrintTextS(25, "비대면 강의부터 대면 강의, 팀플, 과제 그리고");
 
 	gotoxy(8, 14);
-	ch = "동기, 선배들과 함께하는 엠티까지..!!";
-	length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(25);
-	}
+	PrintTextS(25, "동기, 선배들과 함께하는 엠티까지..!!");
 
 	gotoxy(8, 16);
-	ch = "건대 새내기의 슬기로운 학교생활이 지금 시작됩니다!";
-	length = strlen(ch);
-	for (i = 0; i < length; i++) {
-		printf("%c", ch[i]);
-		Sleep(25);
-	}
+	PrintTextS(25, "건대 새내기의 슬기로운 학교생활이 지금 시작됩니다!");
 	
 	gotoxy(28, 19); printf("Press any key to start");
 }
@@ -802,5 +750,14 @@ void GameClear(int32_t lv) {
 	}
 	else if(g == 'q' || g == 'Q')  {
 
+	}
+}
+
+void PrintTextS(uint16_t delay, uint8_t* ch) {
+	int32_t i;
+	int32_t length = strlen(ch);
+	for (i = 0; i < length; i++) {
+		printf("%c", ch[i]);
+		Sleep(delay);
 	}
 }
