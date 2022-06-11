@@ -740,8 +740,8 @@ void GameOver(int32_t count) {
 		gotoxy(26, 12); printf("힐링 할 시간이 필요합니다");
 		break;
 	case 4:
-		gotoxy(30, 11); printf("팀플에 모든 힘을 쏟아낸 당신");
-		gotoxy(29, 12); printf("꼬박 하루동안 잠에 들게 됩니다.");
+		gotoxy(25, 11); printf("팀플에 모든 힘을 쏟아낸 당신");
+		gotoxy(24, 12); printf("꼬박 하루동안 잠에 들게 됩니다.");
 		break;
 	default:
 		gotoxy(25, 10); printf("어디선가 전화가 걸려옵니다");
