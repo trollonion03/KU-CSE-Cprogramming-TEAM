@@ -54,7 +54,7 @@ void sel_lv(int32_t*);
 void Story();
 void LoadScreen(uint16_t, int32_t);
 void CreateObstacle(int32_t lv);
-void StatusPrint(uint16_t, int32_t, int32_t, int32_t);
+void StatusPrint(int32_t, int32_t, int32_t);
 void GameOver(int32_t);
 void GameClear(int32_t);
 
@@ -365,7 +365,7 @@ void Game_Core(int32_t lvs) {
 	while (1) {
 		if (count2 == 0)
 			px = 1; py = 4; count2++;
-		StatusPrint(d_t, score, hp, st);
+		StatusPrint(score, hp, st);
 		movekey(&px, &py);
 		
 		switch (map_g[px - 1][py - 4]) {
@@ -659,7 +659,7 @@ void CreateObstacle(int32_t lv) {
 	memset(item, 0, sizeof(item));
 }
 
-void StatusPrint(uint16_t dt_c, int32_t score, int32_t hp, int32_t st) {
+void StatusPrint(int32_t score, int32_t hp, int32_t st) {
 	//explain about item information (2, 22). 5, 7
 	gotoxy(52, 5); printf("만족도:       "); gotoxy(60, 5); printf("%d", score);
 	gotoxy(52, 7); printf("체력:          "); gotoxy(60, 7); printf("%d", hp);
