@@ -27,10 +27,10 @@
 #define PY_MAX 21
 #define PX_MIN 1
 #define PX_MAX 50
-#define POS_S1 12
-#define POS_S2 27
-#define POS_S3 42
-#define POS_S4 57
+#define POS_S1 22
+#define POS_S2 37
+#define POS_S3 52
+#define POS_S4 67
 #define BLK 0
 #define WTE 7
 #define YLW 14
@@ -258,7 +258,7 @@ void Story() {
 
 void sel_lv(int32_t *lv) {
 	//TODO: New design needed
-	int32_t gch1, y = 12, count = 1;
+	int32_t gch1, y = 22, count = 1;
 
 	system("cls");
 	gotoxy(34, 1); printf("==========");
@@ -283,11 +283,11 @@ void sel_lv(int32_t *lv) {
 
 	while (1) {
 		CngTxtClr(YLW);
-		gotoxy(y, 9);
-		printf("¡ä_______");
+		gotoxy(y, 10);
+		printf("¢¸");
 		CngTxtClr(WTE);
 		gch1 = _getch();
-		printf("\b\b\b\b\b\b\b\b\b         ");
+		printf("\b\b  ");
 		switch (gch1) {
 		case RIGHT:
 			count++;
