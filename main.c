@@ -55,7 +55,7 @@ void PrintTextS(uint16_t, uint8_t*);
 void Story();
 void LoadScreen(uint16_t, int32_t);
 void CreateObstacle(int32_t lv);
-void StatusPrint(int32_t, int32_t, int32_t);
+void StatusPrint(int32_t, int32_t, int32_t, int32_t);
 void GameOver(int32_t);
 void GameClear(int32_t);
 
@@ -293,7 +293,9 @@ void Game_Core(int32_t lvs) {
 	system("cls");
 	printf("\n");
 	gotoxy(70, 1); printf("◀|▶ |X|");
-	gotoxy(0, 1); printf("|□ game.konkuk.ac.kr:23/Stage%d   | %d학년\n", lvs, lvs);
+	gotoxy(0, 1);
+	if (lvs == 5) printf("|□ game.konkuk.ac.kr:23/Hidden_stage   | 대학원\n");
+	else printf("|□ game.konkuk.ac.kr:23/Stage%d   | %d학년\n", lvs, lvs);
 	printf("-------------------------------------------------------------------------------\n");
 	Create_Ground(MAP_WIDTH, MAP_HEIGHT);
 	CreateObstacle(lvs);
@@ -313,7 +315,7 @@ void Game_Core(int32_t lvs) {
 	while (1) {
 		if (count2 == 0)
 			px = 1; py = 4; count2++;
-		StatusPrint(score, hp, st);
+		StatusPrint(score, hp, st, lvs);
 		movekey(&px, &py);
 		
 		switch (map_g[px - 1][py - 4]) {
@@ -494,6 +496,8 @@ void CreateObstacle(int32_t lv) {
 	case 4:
 		mt = 0; dp = 3; ca = 3; di = 2; tp = 2; hw = 3; cl = 3; oc = 3;
 		break;
+	case 5:
+		mt = 0; dp = 2; ca = 3; di = 2; tp = 4; hw = 4; cl = 4; oc = 4;
 	
 	default:
 		break;
@@ -514,13 +518,13 @@ void CreateObstacle(int32_t lv) {
 
 	//Create random item
 	for (i = 0; i <= mt; i++) {
-		x = rand() % MAP_WIDTH-2;
+		x = rand() % MAP_WIDTH - 2;
 		y = rand() % MAP_HEIGHT - 2;
-		
+
 		if (item[x][y] == 0) item[x][y] = 1;
 		else i--;
 	}
-	
+		
 	for (i = 0; i <= dp; i++) {
 		x = rand() % MAP_WIDTH - 2;
 		y = rand() % MAP_HEIGHT - 2;
@@ -552,7 +556,7 @@ void CreateObstacle(int32_t lv) {
 		if (item[x][y] == 0) item[x][y] = 6;
 		else i--;
 	}
-	
+
 	for (i = 0; i <= hw; i++) {
 		x = rand() % MAP_WIDTH - 2;
 		y = rand() % MAP_HEIGHT - 2;
@@ -560,7 +564,7 @@ void CreateObstacle(int32_t lv) {
 		if (item[x][y] == 0) item[x][y] = 7;
 		else i--;
 	}
-	
+
 	for (i = 0; i <= cl; i++) {
 		x = rand() % MAP_WIDTH - 2;
 		y = rand() % MAP_HEIGHT - 2;
@@ -590,8 +594,10 @@ void CreateObstacle(int32_t lv) {
 	for (j = 0; j < row; j++) {
 		for (k = 0; k < col; k++) {
 			if (item[j][k] != 0 && item[j][k] != 2 && item[j][k] != 27) {
-				gotoxy(j+1, k+4);
-				printf("@");
+				if (lv != 5) {
+					gotoxy(j + 1, k + 4);
+					printf("@");
+				}
 			}
 			else if (item[j][k] == 2) {
 				gotoxy(j+1, k+4);
@@ -607,7 +613,7 @@ void CreateObstacle(int32_t lv) {
 	memset(item, 0, sizeof(item));
 }
 
-void StatusPrint(int32_t score, int32_t hp, int32_t st) {
+void StatusPrint(int32_t score, int32_t hp, int32_t st, int32_t lv) {
 	//explain about item information (2, 22). 5, 7
 	gotoxy(52, 5); printf("만족도:       "); gotoxy(60, 5); printf("%d", score);
 	gotoxy(52, 7); printf("체력:          "); gotoxy(60, 7); printf("%d", hp);
@@ -615,42 +621,50 @@ void StatusPrint(int32_t score, int32_t hp, int32_t st) {
 	gotoxy(2, 22);
 	switch (st) {
 	case 1:
-		printf("대학생활의 묘미인 mt를 간 당신, 만족도가 30 올라갑니다.");
+		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
+		else printf("대학생활의 묘미인 mt를 간 당신, 만족도가 30 올라갑니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); CngTxtClr(GRE); printf("+30  "); CngTxtClr(WTE);
 		break;
 	case 3:
-		printf("술자리에 간 당신, 만족도가 20올라가지만 체력이 10 떨어집니다.");
+		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
+		else printf("술자리에 간 당신, 만족도가 20올라가지만 체력이 10 떨어집니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); CngTxtClr(GRE); printf("+20  "); CngTxtClr(RED); printf("-10"); CngTxtClr(WTE);
 		break;
 	case 4:
-		printf("공강이 생긴 당신, 만족도와 체력이 모두 10 올라갑니다.");
+		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
+		else printf("공강이 생긴 당신, 만족도와 체력이 모두 10 올라갑니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); CngTxtClr(GRE); printf("+10  "); printf("+10"); CngTxtClr(WTE);
 		break;
 	case 5:
-		printf("밥약속에 간 당신, 만족도가 10 올라갑니다.");
+		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
+		else printf("밥약속에 간 당신, 만족도가 10 올라갑니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); CngTxtClr(GRE); printf("+10  "); CngTxtClr(WTE);
 		break;
 	case 6:
-		printf("팀플을 끝낸 당신… 체력이 30 떨어집니다.");
+		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
+		else printf("팀플을 끝낸 당신… 체력이 30 떨어집니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-30"); CngTxtClr(WTE);
 		break;
 	case 7:
-		printf("과제를 끝낸 당신… 체력이 20 떨어집니다.");
+		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
+		else printf("과제를 끝낸 당신… 체력이 20 떨어집니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-20"); CngTxtClr(WTE);
 		break;
 	case 8:
-		printf("대면 수업에 간 당신… 체력이 20 떨어집니다.");
+		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
+		else printf("대면 수업에 간 당신… 체력이 20 떨어집니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-20"); CngTxtClr(WTE);
 		break;
 	case 9:
-		printf("실시간 강의를 들은 당신… 체력이 10 떨어집니다.");
+		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
+		else printf("실시간 강의를 들은 당신… 체력이 10 떨어집니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-10"); CngTxtClr(WTE);
 		break;
@@ -660,7 +674,7 @@ void StatusPrint(int32_t score, int32_t hp, int32_t st) {
 }
 
 void GameOver(int32_t count) {
-	int32_t g;
+	int32_t g, c = 0;
 	system("cls");
 	gotoxy(11, 6);  printf("|□ game.konkuk.ac.kr:23/GameOver   |");
 	gotoxy(59, 6);  printf("◀|▶ |X|");
@@ -696,12 +710,15 @@ void GameOver(int32_t count) {
 		gotoxy(25, 11); printf("\"오랬동안 자네를 봐 왔네,,");
 		gotoxy(22, 12); printf("자네,, 대학원에 올 생각은 없나??\"");
 		d_t = 0;
+		c = 1;
 		break;
 	}
 	
 	g = _getch();
 	if (g != 'q' && g != 'Q') {
-
+		if (c == 1) {
+			Game_Core(5);
+		}
 	}
 	else {
 		exit(0);
