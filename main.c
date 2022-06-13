@@ -41,6 +41,7 @@
 //Global variables
 int32_t map_g[MAP_WIDTH-2][MAP_HEIGHT-2];
 uint16_t d_t = 0;
+uint32_t g_cnt, g_cnt2;
 
 //functions
 void gotoxy(int32_t, int32_t);
@@ -50,6 +51,7 @@ void CreateTitleScreen();
 void Game_Core(int32_t);
 void Create_Ground(int16_t, int16_t);
 void movekey(int32_t*, int32_t*);
+void movemonster(int32_t*, int32_t*);
 void sel_lv(int32_t*);
 void PrintTextS(uint16_t, uint8_t*);
 void Story();
@@ -287,8 +289,8 @@ void sel_lv(int32_t *lv) {
 void Game_Core(int32_t lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
-	int32_t px = 0, py = 0, count = 0, count2 = 0, st = 0;
-	int32_t score, hp;
+	int32_t px = 0, py = 0, count = 0, count2 = 0, st = 0, mx = 0, my = 0, mx1 = 0, my1 = 0;
+	int32_t score, hp, row, col, j, k;
 
 	system("cls");
 	printf("\n");
@@ -309,15 +311,17 @@ void Game_Core(int32_t lvs) {
 	gotoxy(52, 19); printf("만족도를 100점 채우시오");
 
 	px = 1; py = 4;
+	mx = 20; my = 12;
 	score = 0; hp = 100;
 	
 	//TODO: Add game over & game clear conditions
 	while (1) {
 		if (count2 == 0)
-			px = 1; py = 4; count2++;
+			px = 1; py = 4; mx = 20, my = 12, count2++;
 		StatusPrint(score, hp, st, lvs);
-		movekey(&px, &py);
-		
+		movekey(&px, &py);	
+		movemonster(&mx, &my);
+		map_g[mx-1][my-4] = 10;
 		switch (map_g[px - 1][py - 4]) {
 		case 1:
 			score += 30;
@@ -361,35 +365,77 @@ void Game_Core(int32_t lvs) {
 			map_g[px - 1][py - 4] = 0;
 			st = 9;
 			break;
+		case 10:
+			hp -= 100;
+			break;
 		}
 
 		if (score >= 100 && hp > 0) {
+			g_cnt = 0;
+			g_cnt2 = 0;
+			count2 = 0;
 			GameClear(lvs);
 			Sleep(500);
 			break;
 		}
 		else if (hp < 1) {
+			g_cnt = 0;
+			g_cnt2 = 0;
+			count2 = 0;
 			d_t++;
 			GameOver(d_t);
 			Sleep(500);
 			break;
 		}
+
+		
+
+		col = sizeof(map_g[0]) / sizeof(int32_t);
+		row = sizeof(map_g) / sizeof(map_g[0]);
+
+		for (j = 0; j < row; j++) {
+			for (k = 0; k < col; k++) {
+				if (map_g[j][k] != 0 && map_g[j][k] != 2 && map_g[j][k] != 27 && map_g[j][k] != 10) {
+					if (lvs != 5) {
+						gotoxy(j + 1, k + 4);
+						printf("@");
+					}
+				}
+				else if (map_g[j][k] == 2) {
+					gotoxy(j + 1, k + 4);
+					CngTxtClr(YLW);
+					printf("#");
+					CngTxtClr(WTE);
+				}
+				else if (map_g[j][k] == 10) {
+					gotoxy(j + 1, k + 4);
+					CngTxtClr(RED);
+					printf("$");
+					CngTxtClr(WTE);
+				}
+				else if (map_g[j][k] == 0) {
+					gotoxy(j + 1, k + 4);
+					printf(" ");
+				}
+			}
+		}
+		map_g[mx-1][my-4] = 0;
 	}	
 }
 
 void movekey(int32_t *x, int32_t *y) {
 	//TODO: Add Input-delay
-	static int32_t count, px, py;
+	static int32_t px, py;
 	int32_t ch;
 
 	gotoxy(px, py);
 	CngTxtClr(GRE);
 	printf("O");
 	CngTxtClr(WTE);
-	
-	if (count == 0) {
+
+	if (g_cnt == 0) {
 		px = 1; py = 4;
-		count++;
+		g_cnt++;
 	}
 	else {
 		ch = _getch();
@@ -424,6 +470,48 @@ void movekey(int32_t *x, int32_t *y) {
 		CngTxtClr(WTE);
 		*x = px;
 		*y = py;
+	}
+
+}
+
+void movemonster(int32_t* x, int32_t* y) {
+	//TODO: Add Input-delay
+	static int32_t count, mx, my;
+	int32_t rd;
+	gotoxy(mx, my);
+
+	if (g_cnt2 == 0) {
+		mx = 20; my = 12;
+		g_cnt2++;
+	}
+	else {
+		rd = rand() % 4;
+		switch (rd) {
+		case 1:
+			if (my > PY_MIN && my < PY_MAX && my + 1 != PY_MAX - 1 && map_g[mx - 1][my - 3] != 2)
+				my++;
+			break;
+
+		case 2:
+			if (my > PY_MIN && my < PY_MAX && my - 1 != PY_MIN && map_g[mx - 1][my - 5] != 2)
+				my--;
+			break;
+
+		case 3:
+			if (mx >= PX_MIN && mx < PX_MAX && mx - 1 != PX_MIN - 1 && map_g[mx - 2][my - 4] != 2)
+				mx--;
+			break;
+
+		case 4:
+			if (mx >= PX_MIN && mx < PX_MAX && mx + 1 != PX_MAX - 1 && map_g[mx][my - 4] != 2)
+				mx++;
+			break;
+
+		default:
+			break;
+		}
+		*x = mx;
+		*y = my;
 	}
 
 }
