@@ -395,6 +395,7 @@ void Game_Core(int32_t lvs) {
 
 		for (j = 0; j < row; j++) {
 			for (k = 0; k < col; k++) {
+				// 김형언 바보
 				if (map_g[j][k] != 0 && map_g[j][k] != 2 && map_g[j][k] != 27 && map_g[j][k] != 10) {
 					if (lvs != 5) {
 						gotoxy(j + 1, k + 4);
@@ -465,6 +466,7 @@ void movekey(int32_t *x, int32_t *y) {
 		}
 		printf("\b ");
 		gotoxy(px, py);
+		//이율원 왔다감
 		CngTxtClr(GRE);
 		printf("O");
 		CngTxtClr(WTE);
