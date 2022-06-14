@@ -57,8 +57,8 @@ void PrintTextS(uint16_t, uint8_t*);
 void Story();
 void LoadScreen(uint16_t, int32_t);
 void CreateObstacle(int32_t lv);
-void StatusPrint(int32_t, int32_t, int32_t, int32_t);
-void GameOver(int32_t);
+void StatusPrint(int32_t, int32_t, int32_t, int32_t, float);
+void GameOver(int32_t, int32_t*);
 void GameClear(int32_t);
 
 int32_t main() {
@@ -203,6 +203,11 @@ void Story() {
 	gotoxy(8, 16);
 	PrintTextS(25, "건대 새내기의 슬기로운 학교생활이 지금 시작됩니다!");
 	
+	gotoxy(8, 17);
+	CngTxtClr(RED);
+	PrintTextS(25, "건덕이와 따릉이를 조심하세요!!");
+	CngTxtClr(WTE);
+	
 	gotoxy(28, 19); printf("Press any key to start");
 }
 
@@ -227,8 +232,9 @@ void sel_lv(int32_t *lv) {
 	gotoxy(6, 15); printf("|     | 2. 실패 조건   : 체력 100 모두 소모                       |");
 	gotoxy(6, 16); printf("|     | 3. 장애물(#)을 피해서 @를 찾아가세요!!                    |");
 	gotoxy(6, 17); printf("|     | 4. 플레이어는 초록색 O 입니다!!                           |");
-	gotoxy(6, 18); printf("|                                                                 |");
-	gotoxy(6, 19); printf("-------------------------------------------------------------------");
+	gotoxy(6, 18); printf("|     | 5. 몬스터(따릉이, 건덕이) $ 에 치이면 죽습니다!           |");
+	gotoxy(6, 19); printf("|                                                                 |");
+	gotoxy(6, 20); printf("-------------------------------------------------------------------");
 	gotoxy(68, 22); printf("| Q: exit |");
 
 	while (1) {
@@ -289,8 +295,12 @@ void sel_lv(int32_t *lv) {
 void Game_Core(int32_t lvs) {
 	//TODO: Implementation of core functionality
 	//int ground[25][15];
-	int32_t px = 0, py = 0, count = 0, count2 = 0, st = 0, mx = 0, my = 0, mx1 = 0, my1 = 0;
+	int32_t px = 0, py = 0, count = 0, count2 = 0, st = 0, mx = 0, my = 0, mx1 = 0, my1 = 0, ms = 0;
 	int32_t score, hp, row, col, j, k;
+
+	//timer
+	clock_t start = clock();
+	float max_time = 0;
 
 	system("cls");
 	printf("\n");
@@ -312,13 +322,32 @@ void Game_Core(int32_t lvs) {
 
 	px = 1; py = 4;
 	mx = 20; my = 12;
-	score = 0; hp = 100;
+	score = 0;
+
+	switch (lvs) {
+	case 2:
+		hp = 110;
+		break;
+	case 3:
+		hp = 120;
+		break;
+	case 4:
+		hp = 130;
+		break;
+	default:
+		hp = 100;
+		break;
+	}
 	
 	//TODO: Add game over & game clear conditions
 	while (1) {
 		if (count2 == 0)
 			px = 1; py = 4; mx = 20, my = 12, count2++;
-		StatusPrint(score, hp, st, lvs);
+		clock_t end = clock();
+		float time = (float)(end - start) / CLOCKS_PER_SEC;
+		max_time = 120 - time;
+
+		StatusPrint(score, hp, st, lvs, max_time);
 		movekey(&px, &py);	
 		movemonster(&mx, &my);
 		map_g[mx-1][my-4] = 10;
@@ -329,7 +358,7 @@ void Game_Core(int32_t lvs) {
 			st = 1;
 			break;
 		case 3:
-			score += 20;
+			score += 10;
 			hp -= 10;
 			map_g[px - 1][py - 4] = 0;
 			st = 3;
@@ -351,7 +380,7 @@ void Game_Core(int32_t lvs) {
 			st = 6;
 			break;
 		case 7:
-			hp -= 20;
+			hp -= 15;
 			map_g[px - 1][py - 4] = 0;
 			st = 7;
 			break;
@@ -367,6 +396,7 @@ void Game_Core(int32_t lvs) {
 			break;
 		case 10:
 			hp -= 100;
+			ms = 1;
 			break;
 		}
 
@@ -378,12 +408,12 @@ void Game_Core(int32_t lvs) {
 			Sleep(500);
 			break;
 		}
-		else if (hp < 1) {
+		else if (hp < 1 || max_time < 0) {
 			g_cnt = 0;
 			g_cnt2 = 0;
 			count2 = 0;
 			d_t++;
-			GameOver(d_t);
+			GameOver(d_t, &ms);
 			Sleep(500);
 			break;
 		}
@@ -489,22 +519,22 @@ void movemonster(int32_t* x, int32_t* y) {
 	else {
 		rd = rand() % 4;
 		switch (rd) {
-		case 1:
+		case 0:
 			if (my > PY_MIN && my < PY_MAX && my + 1 != PY_MAX - 1 && map_g[mx - 1][my - 3] != 2)
 				my++;
 			break;
 
-		case 2:
+		case 1:
 			if (my > PY_MIN && my < PY_MAX && my - 1 != PY_MIN && map_g[mx - 1][my - 5] != 2)
 				my--;
 			break;
 
-		case 3:
+		case 2:
 			if (mx >= PX_MIN && mx < PX_MAX && mx - 1 != PX_MIN - 1 && map_g[mx - 2][my - 4] != 2)
 				mx--;
 			break;
 
-		case 4:
+		case 3:
 			if (mx >= PX_MIN && mx < PX_MAX && mx + 1 != PX_MAX - 1 && map_g[mx][my - 4] != 2)
 				mx++;
 			break;
@@ -703,10 +733,11 @@ void CreateObstacle(int32_t lv) {
 	memset(item, 0, sizeof(item));
 }
 
-void StatusPrint(int32_t score, int32_t hp, int32_t st, int32_t lv) {
+void StatusPrint(int32_t score, int32_t hp, int32_t st, int32_t lv, float time) {
 	//explain about item information (2, 22). 5, 7
 	gotoxy(52, 5); printf("만족도:       "); gotoxy(60, 5); printf("%d", score);
 	gotoxy(52, 7); printf("체력:          "); gotoxy(60, 7); printf("%d", hp);
+	gotoxy(52, 9); printf("시간:          "); gotoxy(60, 9); printf("%.f", time);
 	gotoxy(2, 22); printf("                                                              ");
 	gotoxy(2, 22);
 	switch (st) {
@@ -763,7 +794,7 @@ void StatusPrint(int32_t score, int32_t hp, int32_t st, int32_t lv) {
 	}
 }
 
-void GameOver(int32_t count) {
+void GameOver(int32_t count, int32_t* monster) {
 	int32_t g, c = 0;
 	system("cls");
 	gotoxy(11, 6);  printf("|□ game.konkuk.ac.kr:23/GameOver   |");
@@ -780,20 +811,44 @@ void GameOver(int32_t count) {
 
 	switch (count) {
 	case 1:
-		gotoxy(28, 11); printf("너무 무리를 하셨군요");
-		gotoxy(26, 12); printf("때로는 휴식이 필요합니다.");
+		if (*monster == 1) {
+			gotoxy(23, 11); printf("지나가던 따릉이에 치었습니다.");
+			gotoxy(27, 12); printf("건대병원에 실려갑니다");
+		}
+		else {
+			gotoxy(28, 11); printf("너무 무리를 하셨군요");
+			gotoxy(26, 12); printf("때로는 휴식이 필요합니다.");
+		}
 		break;
 	case 2:
-		gotoxy(23, 11); printf("너무 많은 수업에 지쳐 버렸습니다.");
-		gotoxy(20, 12); printf("오늘 하루는 침대와 한 몸이 되어보세요");
+		if (*monster == 1) {
+			gotoxy(23, 11); printf("길가던 건덕이에게 물렸습니다");
+			gotoxy(27, 12); printf("건대병원에 실려갑니다");
+		}
+		else {
+			gotoxy(23, 11); printf("너무 많은 수업에 지쳐 버렸습니다.");
+			gotoxy(20, 12); printf("오늘 하루는 침대와 한 몸이 되어보세요");
+		}
 		break;
 	case 3:
-		gotoxy(18, 11); printf("감당할 수 없는 과제에 체력이 다 닳았습니다.");
-		gotoxy(26, 12); printf("힐링 할 시간이 필요합니다");
+		if (*monster == 1) {
+			gotoxy(23, 11); printf("지나가던 따릉이에 치었습니다.");
+			gotoxy(27, 12); printf("건대병원에 실려갑니다");
+		}
+		else {
+			gotoxy(18, 11); printf("감당할 수 없는 과제에 체력이 다 닳았습니다.");
+			gotoxy(26, 12); printf("힐링 할 시간이 필요합니다");
+		}
 		break;
 	case 4:
-		gotoxy(25, 11); printf("팀플에 모든 힘을 쏟아낸 당신");
-		gotoxy(24, 12); printf("꼬박 하루동안 잠에 들게 됩니다.");
+		if (*monster == 1) {
+			gotoxy(23, 11); printf("지나가던 따릉이에 치었습니다.");
+			gotoxy(27, 12); printf("건대병원에 실려갑니다");
+		}
+		else {
+			gotoxy(25, 11); printf("팀플에 모든 힘을 쏟아낸 당신");
+			gotoxy(24, 12); printf("꼬박 하루동안 잠에 들게 됩니다.");
+		}
 		break;
 	default:
 		gotoxy(25, 10); printf("어디선가 전화가 걸려옵니다");
@@ -807,6 +862,7 @@ void GameOver(int32_t count) {
 	g = _getch();
 	if (g != 'q' && g != 'Q') {
 		if (c == 1) {
+			c = 0;
 			Game_Core(5);
 		}
 	}
