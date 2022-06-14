@@ -781,7 +781,7 @@ void StatusPrint(int32_t score, int32_t hp, int32_t st, int32_t lv, float time) 
 		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
 		else printf("대면 수업에 간 당신… 체력이 15 떨어집니다.");
 		gotoxy(67, 22); printf("         ");
-		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-20"); CngTxtClr(WTE);
+		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-15"); CngTxtClr(WTE);
 		break;
 	case 9:
 		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
