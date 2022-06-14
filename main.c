@@ -364,7 +364,7 @@ void Game_Core(int32_t lvs) {
 			st = 3;
 			break;
 		case 4:
-			score += 10;
+			score += 20;
 			hp += 10;
 			map_g[px - 1][py - 4] = 0; 
 			st = 4;
@@ -380,12 +380,12 @@ void Game_Core(int32_t lvs) {
 			st = 6;
 			break;
 		case 7:
-			hp -= 15;
+			hp -= 20;
 			map_g[px - 1][py - 4] = 0;
 			st = 7;
 			break;
 		case 8:
-			hp -= 20;
+			hp -= 15;
 			map_g[px - 1][py - 4] = 0;
 			st = 8;
 			break;
@@ -611,10 +611,10 @@ void CreateObstacle(int32_t lv) {
 		mt = 1; dp = 2; ca = 2; di = 4; tp = 1; hw = 2; cl = 4; oc = 3;
 		break;
 	case 3:
-		mt = 1; dp = 2; ca = 2; di = 3; tp = 2; hw = 2; cl = 3; oc = 3;
+		mt = 1; dp = 2; ca = 2; di = 3; tp = 1; hw = 2; cl = 3; oc = 3;
 		break;
 	case 4:
-		mt = 0; dp = 3; ca = 3; di = 2; tp = 2; hw = 3; cl = 3; oc = 3;
+		mt = 0; dp = 3; ca = 3; di = 2; tp = 1; hw = 3; cl = 3; oc = 3;
 		break;
 	case 5:
 		mt = 0; dp = 2; ca = 3; di = 2; tp = 4; hw = 4; cl = 4; oc = 4;
@@ -755,7 +755,7 @@ void StatusPrint(int32_t score, int32_t hp, int32_t st, int32_t lv, float time) 
 		break;
 	case 4:
 		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
-		else printf("공강이 생긴 당신, 만족도와 체력이 모두 10 올라갑니다.");
+		else printf("공강이 생긴 당신, 만족도 20 체력이 10 올라갑니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); CngTxtClr(GRE); printf("+10  "); printf("+10"); CngTxtClr(WTE);
 		break;
@@ -779,7 +779,7 @@ void StatusPrint(int32_t score, int32_t hp, int32_t st, int32_t lv, float time) 
 		break;
 	case 8:
 		if (lv == 5) printf("여기는 대학원입니다 설명따윈 없어요!");
-		else printf("대면 수업에 간 당신… 체력이 20 떨어집니다.");
+		else printf("대면 수업에 간 당신… 체력이 15 떨어집니다.");
 		gotoxy(67, 22); printf("         ");
 		gotoxy(67, 22); printf("     "); CngTxtClr(RED); printf("-20"); CngTxtClr(WTE);
 		break;
@@ -812,7 +812,7 @@ void GameOver(int32_t count, int32_t* monster) {
 	switch (count) {
 	case 1:
 		if (*monster == 1) {
-			gotoxy(23, 11); printf("지나가던 따릉이에 치었습니다.");
+			gotoxy(23, 11); printf("지나가던 따릉이에 치였습니다.");
 			gotoxy(27, 12); printf("건대병원에 실려갑니다");
 		}
 		else {
@@ -852,7 +852,7 @@ void GameOver(int32_t count, int32_t* monster) {
 		break;
 	default:
 		gotoxy(25, 10); printf("어디선가 전화가 걸려옵니다");
-		gotoxy(25, 11); printf("\"오랬동안 자네를 봐 왔네,,");
+		gotoxy(25, 11); printf("\"오랫동안 자네를 봐 왔네,,");
 		gotoxy(22, 12); printf("자네,, 대학원에 올 생각은 없나??\"");
 		d_t = 0;
 		c = 1;
